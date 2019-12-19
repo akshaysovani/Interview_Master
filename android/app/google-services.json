@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "993439344755",
+    "firebase_url": "https://interview-master-34d9e.firebaseio.com",
+    "project_id": "interview-master-34d9e",
+    "storage_bucket": "interview-master-34d9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993439344755:android:b84d6ca2c52dcba4c86206",
+        "android_client_info": {
+          "package_name": "com.akshaysovani.interview_master"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993439344755-hsd3f6splm79d7sjvkogfm731d4vimav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdG8Sb3GDP5oTG9GkKZq-pEE-vincbZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993439344755-hsd3f6splm79d7sjvkogfm731d4vimav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
