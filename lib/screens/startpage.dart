@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:interview_master/screens/adminseeemployees.dart';
 import 'package:interview_master/screens/interviewerseecandidates.dart';
 import 'package:interview_master/screens/recruiterseerequirements.dart';
 import 'dart:async';
@@ -76,9 +77,7 @@ class StartPageState extends State<StartPage> {
                       textScaleFactor: 1.5,
                     ),
                     onPressed: () {
-                      setState(() {
                         goToRecruiterSeeCandidatesAndRequirements();
-                      });
                     }),
               )),
           Padding(
@@ -102,7 +101,7 @@ class StartPageState extends State<StartPage> {
                       textScaleFactor: 1.5,
                     ),
                     onPressed: () {
-                      setState(() {goToInterviewerSeeCandidates();});
+                      goToInterviewerSeeCandidates();
                     }),
               )),
           Padding(
@@ -126,7 +125,7 @@ class StartPageState extends State<StartPage> {
                       textScaleFactor: 1.5,
                     ),
                     onPressed: () {
-                      setState(() {});
+                      goToAdminSeeEmployees();
                     }),
               )),
 
@@ -155,31 +154,9 @@ class StartPageState extends State<StartPage> {
                     }),
               )),
 
-          Padding(
-              padding: EdgeInsets.only(
-                top: 30,
-                left: 20,
-                right: 20,
-              ),
-              child: getSignUpText())
+          
         ],
       ),
-    );
-  }
-
-  Widget getSignUpText() {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: 40,
-        ),
-        Text('Don\'t have an account? ',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontFamily: 'Open Sans')),
-        Text('Sign Up',
-            style: TextStyle(
-                color: Colors.blue[900], fontSize: 18, fontFamily: 'Open Sans'))
-      ],
     );
   }
 
@@ -199,6 +176,12 @@ class StartPageState extends State<StartPage> {
   void goToInterviewerSeeCandidates(){
     Navigator.push(context, MaterialPageRoute(builder: (context){
       return InterviewerSeeCandidates();
+    }));
+  }
+
+  void goToAdminSeeEmployees(){
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return AdminSeeEmployees();
     }));
   }
 }

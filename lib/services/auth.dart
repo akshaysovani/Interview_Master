@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:interview_master/models/user.dart';
+import 'package:interview_master/services/database.dart';
 
 class AuthService{
 
@@ -30,15 +31,24 @@ Future signInAnon() async{
 }
 
 
-
-
-
 //sign in
+Future signInWithEmailAndPassword(String email, String password) async{
+  try{
+     AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password); 
+     return getUserFromFirebaseUser(result.user);
+  }catch(e){
+    print(e.toString());
+    return null;
+  }
+}
+
 
 //register with email and password
-Future registerWithEmailAndPassword(String email, String password) async{
+Future registerWithEmailAndPassword(String fullName, String role, String email, String password) async{
   try{
      AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password); 
+     //Create a new document for the registered used
+     await DatabaseService(result.user.uid).updateUserCollection(fullName, role);
      return getUserFromFirebaseUser(result.user);
   }catch(e){
     print(e.toString());

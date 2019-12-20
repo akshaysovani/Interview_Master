@@ -19,6 +19,7 @@ class NewUserRegister extends StatefulWidget {
 class NewUserRegisterState extends State<NewUserRegister> {
 
   final AuthService _auth = AuthService();
+  String error = '';
 
   TextEditingController fullNameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -57,8 +58,6 @@ class NewUserRegisterState extends State<NewUserRegister> {
             key: _formKey,
             child: ListView(
               children: <Widget>[
-                
-
                 TextFormField(
                   validator: (val) => val.isEmpty ? 'Enter Full Name' : null,
                   style: textStyle,
@@ -180,12 +179,14 @@ class NewUserRegisterState extends State<NewUserRegister> {
                         print(usernameController);
                         print(passwordController); */
 
-                        dynamic result = await _auth.registerWithEmailAndPassword(usernameController.text, passwordController.text);
+                        dynamic result = await _auth.registerWithEmailAndPassword(fullNameController.text, _currentvalueselected, usernameController.text, passwordController.text);
                         
                         if (result == null){
-                          print(result.toString());
+                          setState(() {
+                            error = 'Could not register';
+                          });
                         }else{
-
+                            _save();
                         }
                       }
                     }),
