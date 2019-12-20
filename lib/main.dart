@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:interview_master/models/user.dart';
+import 'package:interview_master/models/userwithrole.dart';
 import 'package:interview_master/screens/adminaddemployee.dart';
 import 'package:interview_master/screens/adminseeemployees.dart';
 import 'package:interview_master/screens/authenticate/newuserregister.dart';
@@ -33,9 +34,11 @@ void main() {
 class InterviewApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: AuthService().user,
-      child:  MaterialApp(
+    return StreamProvider<UserWithRole>.value(    // listen to user
+      value: AuthService().userWithRole,
+      //child:  StreamProvider<User>.value(   // listen to 
+        //value: AuthService().userwithsds,
+        child: MaterialApp(
         /*theme: ThemeData(
           primarySwatch: Colors.deepPurple
       ),*/
@@ -69,7 +72,11 @@ class InterviewApp extends StatelessWidget {
 
         //home: SignIn()
         //home: NewUserRegister()
-    ));
+    ),
+      //)
+      
+      
+      );
     
    
   }
