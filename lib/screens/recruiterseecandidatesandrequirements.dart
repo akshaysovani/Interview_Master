@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/screens/recruiterseecandidates.dart';
 import 'package:interview_master/screens/recruiterseerequirements.dart';
+import 'package:interview_master/services/auth.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
@@ -17,6 +18,7 @@ class RecruiterSeeCandidatesAndRequirements extends StatefulWidget {
 
 class RecruiterSeeCandidatesAndRequirementsState
     extends State<RecruiterSeeCandidatesAndRequirements> {
+  final AuthService _authService = AuthService();
   int count = 0;
   List<Requirement> requirementList;
 
@@ -56,7 +58,7 @@ class RecruiterSeeCandidatesAndRequirementsState
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
+          /* leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 // goToPreviousPage();
@@ -67,7 +69,7 @@ class RecruiterSeeCandidatesAndRequirementsState
                   this.searchBar = Text('Interview Helper');
                 }
 
-              }),
+              }), */
           title: this.searchBar,
           bottom: TabBar(
             indicatorColor: Colors.red,
@@ -102,7 +104,19 @@ class RecruiterSeeCandidatesAndRequirementsState
                   }
                 });
               },
+            ),
+            
+            FlatButton.icon(
+              icon: Icon(Icons.person, color: Colors.white,),
+              label: Text('Logout', style: TextStyle(color: Colors.white,
+                    fontFamily: 'Helvetica',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),),
+              onPressed: () async{
+                await _authService.signOut();
+              },
             )
+
           ],
         ),
 

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:interview_master/models/userwithrole.dart';
@@ -34,16 +33,16 @@ class DatabaseService {
   return await Firestore.instance.collection('user').getDocuments();
   } */
 
-void getRoleForThisUser() async {
-  Firestore.instance.collection('user').getDocuments().then((val){
-    if(val.documents.length > 0){
-        print(val.documents[0].data["role"]);
-    }
-    else{
-        print("Not Found");
-    }
+String getRoleForThisUser() {
+    String role = '';
+    Firestore.instance.collection('user').document(this.uid).get().then((DocumentSnapshot ds){
+    role = ds['role'];
+    print('Let me check');
+    print('Role is of : ............. '+role);
+    //print(role);
   });
-
+  
+  return role;
 }
  
  /*  void getRoleForThisUser() async {

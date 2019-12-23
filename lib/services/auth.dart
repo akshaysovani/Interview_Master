@@ -5,8 +5,7 @@ import 'package:interview_master/services/database.dart';
 
 
 class AuthService{
-
-
+  
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 User getUserFromFirebaseUser(FirebaseUser user){
@@ -18,20 +17,12 @@ UserWithRole getUserWithRoleFromFirebaseUser(FirebaseUser user, String role){
 }
 
 //Stream of Firebaseuser on change of auth state   //User if signing in else null if user signs out.  
-Stream<UserWithRole> get userWithRole{
+Stream<User> get user{
   return _auth.onAuthStateChanged
   .map((FirebaseUser user){
       //get role from database
       if (user != null){
-      print('user is : '+ user.toString());
-      //String role = DatabaseService(user.uid).getRoleForThisUser();
-      DatabaseService(user.uid).getRoleForThisUser();
-      //Future<String> role = DatabaseService(user.uid).getRoleForThisUser();
-      //print('role is : '+ role.toString());
-      //print('role is ...'+ role);
-      //String role = getRoleofUser();
-      String role = 'Role';
-      return getUserWithRoleFromFirebaseUser(user,role.toString());
+      return getUserFromFirebaseUser(user);
       }
       return null;
   });

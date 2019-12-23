@@ -34,8 +34,8 @@ void main() {
 class InterviewApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<UserWithRole>.value(    // listen to user
-      value: AuthService().userWithRole,
+    return StreamProvider<User>.value(    // listen to user
+      value: AuthService().user,
       //child:  StreamProvider<User>.value(   // listen to 
         //value: AuthService().userwithsds,
         child: MaterialApp(
@@ -56,7 +56,7 @@ class InterviewApp extends StatelessWidget {
         //home: RecruiterAddCandidate(),
         //home: RecruiterSeeCandidatesByRequirement(),
         //home: RecruiterSeeRequirements()
-        //home: RecruiterSeeCandidatesAndRequirementsTest()
+        //home: RecruiterSeeCandidatesAndRequirements()
 
         //home: InterviewerEnterFeedback(),
         //home: InterviewerSeeRoundsOfCandidate()
