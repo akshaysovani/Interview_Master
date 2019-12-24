@@ -5,9 +5,8 @@ import 'package:interview_master/screens/hiringmanagerseecandidates.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/services/auth.dart';
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
+import 'package:interview_master/services/database.dart';
+import 'package:provider/provider.dart';
 
 class HiringManagerSeeRequirements extends StatefulWidget {
   @override
@@ -17,59 +16,38 @@ class HiringManagerSeeRequirements extends StatefulWidget {
 }
 
 class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequirements> {
-  final AuthService _authService = AuthService();
-
   int count = 0;
   List<Requirement> requirementList;
-
+  
   @override
   Widget build(BuildContext context) {
+    requirementList = Provider.of<List<Requirement>>(context);
     if (requirementList == null) {
       requirementList = List<Requirement>();
-      requirementList.add(Requirement(1, 'Java', 'Developer','Project alpha'));
-      requirementList.add(Requirement(2, 'Python', 'Fresher','Project beta'));
-      requirementList.add(Requirement(3, 'C++', 'Developer','Project gamma'));
-      requirementList.add(Requirement(4, 'Java', 'Architect','Project gamma'));
+      /* requirementList.add(Requirement(1, 'Java', ['Confidence','Communication'],'Developer','Project alpha',''));
+      requirementList.add(Requirement(2, 'Python', ['Confidence','Communication'], 'Fresher','Project beta',''));
+      requirementList.add(Requirement(3, 'C++', ['Confidence','Communication'], 'Developer','Project gamma',''));
+      requirementList.add(Requirement(4, 'Java', ['Confidence','Communication'], 'Architect','Project gamma','')); */
     }
-
+    
     return Scaffold(
-      appBar: AppBar(
-          title: Text('Requirements'),
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.person, color: Colors.white,),
-              label: Text('Logout', style: TextStyle(color: Colors.white,
-                    fontFamily: 'Helvetica',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),),
-              onPressed: () async{
-                await _authService.signOut();
-              },
-            )
-          ],
-          /* leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                goToStartPage();
-              }) */
-      ),
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[900],
         onPressed: () {
-          goToHiringManagerAddRequirementTest(Requirement(5,'','',''), 'Add Requirement');
+          goToHiringManagerAddRequirementTest(Requirement(), 'Add Requirement');
         },
         tooltip: 'Add Requirement',
         child: Icon(Icons.add, color: Colors.white,),
       ),
-    );
+    ); 
   }
 
   ListView getListView() {
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: this.requirementList.length,
+        itemCount: requirementList.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
@@ -81,10 +59,10 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                 //    color: Colors.black
                 ),
               ),*/
-              title: Text(
+              /* title: Text(
                 //'\n'+
-                this.requirementList[position].title
-                    + '  -  ' + this.requirementList[position].experience_level
+                this.requirementList[position].primarySkill
+                    + '  -  ' + this.requirementList[position].experienceLevel
                 ,
                 style: TextStyle(
                     color: Colors.blue[900],
@@ -92,10 +70,10 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                     fontWeight: FontWeight.bold,
                     fontSize: 18
                 ),
-              ),
-              subtitle: Text(
+              ), */
+              /* subtitle: Text(
                 //'\n' +
-                this.requirementList[position].project_name
+                this.requirementList[position].projectName
                 //  + '\n'
                 ,
                 style: TextStyle(
@@ -104,7 +82,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                     fontWeight: FontWeight.bold,
                     fontSize: 15
                 ),
-              ),
+              ), */
               trailing: SizedBox(
                 width: 80.0,
                 child: Row(
@@ -114,7 +92,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                       child: GestureDetector(
 
                         onTap: () {
-                          String title = 'Edit - ' + this.requirementList[position].title + ' - ' + this.requirementList[position].experience_level;
+                          String title = 'Edit - ' + this.requirementList[position].primarySkill + ' - ' + this.requirementList[position].experienceLevel;
                           goToHiringManagerAddRequirementTest(this.requirementList[position],title);
                         },
                         child: Icon(Icons.edit
@@ -133,7 +111,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                 ),
               ),
               onTap: (){
-                String title = this.requirementList[position].title + '  -  ' +  this.requirementList[position].experience_level;
+                String title = this.requirementList[position].primarySkill + '  -  ' +  this.requirementList[position].experienceLevel;
                 goToHiringManagerSeeCandidates(title);
               },
             ),

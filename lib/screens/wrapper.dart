@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:interview_master/models/user.dart';
 import 'package:interview_master/models/userwithrole.dart';
 import 'package:interview_master/screens/authenticate/authenticate.dart';
+import 'package:interview_master/screens/hiringmanagerhome.dart';
 import 'package:interview_master/screens/hiringmanagerseerequirement.dart';
 import 'package:interview_master/screens/interviewerseecandidates.dart';
 import 'package:interview_master/screens/recruiterseecandidatesandrequirements.dart';
@@ -50,7 +51,7 @@ class _WrapperState extends State<Wrapper> {
              }
              else if (snapshot.data == 'Hiring Manager'){
                 //return HiringManagerSeeRequirements();
-                return HiringManagerSeeRequirements();
+                return HiringManagerHomePage();
              }
              else if (snapshot.data == 'Recruiter'){
                 //return HiringManagerSeeRequirements();

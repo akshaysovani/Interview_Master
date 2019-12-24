@@ -57,7 +57,7 @@ Future registerWithEmailAndPassword(String fullName, String role, String email, 
   try{
      AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password); 
      //Create a new document for the registered used
-     await DatabaseService(result.user.uid).updateUserCollection(fullName, role);
+     await DatabaseService(uid: result.user.uid).updateUserCollection(fullName, role);
      return getUserFromFirebaseUser(result.user);
   }catch(e){
     print(e.toString());

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
+import 'package:interview_master/models/user.dart';
+import 'package:interview_master/services/database.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
@@ -18,6 +21,8 @@ class HiringManagerAddRequirementState
     extends State<HiringManagerAddRequirement> {
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+
     TextStyle textStyle = Theme.of(context).textTheme.subtitle;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -247,10 +252,8 @@ class HiringManagerAddRequirementState
                       'Save',
                       textScaleFactor: 1.5,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _save();
-                      });
+                    onPressed: () async{
+                      await DatabaseService().updateRequirementCollection(Requirement(),user); // Update it
                     }),
               ))
         ],

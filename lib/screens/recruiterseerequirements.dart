@@ -21,10 +21,10 @@ class RecruiterSeeRequirementsState extends State<RecruiterSeeRequirements> {
   Widget build(BuildContext context) {
     if (requirementList == null) {
       requirementList = List<Requirement>();
-      requirementList.add(Requirement(1, 'Java', 'Developer','Project alpha'));
-      requirementList.add(Requirement(2, 'Sales Representative', 'Fresher','Project beta'));
-      requirementList.add(Requirement(3, 'C++', 'Developer','Project gamma'));
-      requirementList.add(Requirement(3, 'Java', 'Architect','Project gamma'));
+      /* requirementList.add(Requirement(1, 'Java', ['Confidence','Communication'],'Developer','Project alpha',''));
+      requirementList.add(Requirement(2, 'Sales Representative',['Confidence','Communication'], 'Fresher','Project beta',''));
+      requirementList.add(Requirement(3, 'C++',['Confidence','Communication'], 'Developer','Project gamma',''));
+      requirementList.add(Requirement(3, 'Java', ['Confidence','Communication'],'Architect','Project gamma','')); */
       /*requirementList[0].id = 1;
       requirementList[0].title = 'Java';
       requirementList[0].no_of_vacancies = 2;
@@ -65,8 +65,8 @@ class RecruiterSeeRequirementsState extends State<RecruiterSeeRequirements> {
               ),*/
               title: Text(
                 //'\n'+
-                this.requirementList[position].title
-                    + '  -  ' + this.requirementList[position].experience_level
+                this.requirementList[position].primarySkill
+                    + '  -  ' + this.requirementList[position].experienceLevel
                 ,
                 style: TextStyle(
                     color: Colors.blue[900],
@@ -77,7 +77,7 @@ class RecruiterSeeRequirementsState extends State<RecruiterSeeRequirements> {
               ),
               subtitle: Text(
                 //'\n' +
-                this.requirementList[position].project_name
+                this.requirementList[position].projectName
                 //  + '\n'
                 ,
                 style: TextStyle(

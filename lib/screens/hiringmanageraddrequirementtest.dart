@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
+import 'package:interview_master/models/user.dart';
+import 'package:interview_master/services/database.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
@@ -23,6 +26,14 @@ class HiringManagerAddRequirementTest extends StatefulWidget {
 class HiringManagerAddRequirementTestState
     extends State<HiringManagerAddRequirementTest> {
 
+  var _experience = ['Fresher', 'Developer', 'Lead', 'Architect'];
+  var _currentvalueselected = '';
+
+  initState() {
+    super.initState();
+    _currentvalueselected = _experience[0];
+  }
+
   Requirement requirement;
   String addOrEdit;
 
@@ -35,8 +46,25 @@ class HiringManagerAddRequirementTestState
   List<bool> pressAttention;
   List<bool> longpressAttention;
 
+  List<String> projectList;
+  AutoCompleteTextField projectTextField;
+  GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
+ 
   @override
   Widget build(BuildContext context) {
+    TextEditingController projectController = TextEditingController();
+    TextEditingController customerController = TextEditingController();
+    //AutoCompleteTextField
+
+    User user = Provider.of<User>(context);
+    
+    if (projectList == null){
+      projectList = List(); 
+      projectList.add('Project alpha');
+      projectList.add('Project beta');
+      projectList.add('Project gamma');
+
+    }
 
     if (primarySkills == null){
       primarySkills = List<String>();
@@ -122,7 +150,6 @@ class HiringManagerAddRequirementTestState
                 ),
               )),
           //Text
-
           Container(
             height: 400,
             width:  200,
@@ -162,160 +189,50 @@ class HiringManagerAddRequirementTestState
                           ),
                     )
                   //Java
-
                 );
               }
           ),
           ),
 
-/*
-          Padding(
-              padding: EdgeInsets.only(
-                top: 20,
-                left: 120,
-                right: 120,
-              ),
-              child: SizedBox(
-                width: 50,
-                height: 35,
-                child: RaisedButton(
-                  //color: Theme.of(context).accentColor,
-                  //color: Colors.grey[300],
-                    color: Colors.green,
-                    textColor: Colors.white,
-                    child: Text(
-                      'Java',
-                      textScaleFactor: 1.5,
-                    ),
-                    onPressed: () {
-                      setState(() {});
-                    }),
-              )
-            //Java
-          ),
-          Padding(
-              padding: EdgeInsets.only(
-                top: 10,
-                left: 120,
-                right: 120,
-              ),
-              child: SizedBox(
-                width: 50,
-                height: 35,
-                child: RaisedButton(
-                    color: Colors.grey[300],
-                    textColor: Colors.black,
-                    child: Text(
-                      'C++',
-                      textScaleFactor: 1.5,
-                    ),
-                    onPressed: () {
-                      setState(() {});
-                    }),
-              )),
-          //C++
-          Padding(
-              padding: EdgeInsets.only(
-                top: 5,
-                left: 120,
-                right: 120,
-              ),
-              child: SizedBox(
-                width: 50,
-                height: 35,
-                child: RaisedButton(
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    //color: Colors.grey[300],
-                    //textColor: Colors.black,
-                    child: Text(
-                      'Python',
-                      textScaleFactor: 1.5,
-                    ),
-                    onPressed: () {
-                      setState(() {});
-                    }),
-              )),
-          //Python
-          Padding(
-              padding: EdgeInsets.only(
-                top: 5,
-                left: 120,
-                right: 120,
-              ),
-              child: SizedBox(
-                width: 50,
-                height: 35,
-                child: RaisedButton(
-                    color: Colors.grey[300],
-                    textColor: Colors.black,
-                    child: Text(
-                      'SQL',
-                      textScaleFactor: 1.5,
-                    ),
-                    onPressed: () {
-                      setState(() {});
-                    }),
-              )),
-          Padding(
-              padding: EdgeInsets.only(
-                top: 5,
-                left: 120,
-                right: 120,
-              ),
-              child: SizedBox(
-                width: 50,
-                height: 35,
-                child: RaisedButton(
-                    color: Colors.grey[300],
-                    textColor: Colors.black,
-                    child: Text(
-                      'C#.NET',
-                      textScaleFactor: 1.5,
-                    ),
-                    onPressed: () {
-                      setState(() {});
-                    }),
-              )),
-          //Communication
-          Padding(
-              padding: EdgeInsets.only(
-                top: 5,
-                left: 120,
-                right: 120,
-              ),
-              child: SizedBox(
-                width: 50,
-                height: 35,
-                child: RaisedButton(
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    //color: Colors.grey[300],
-                    //textColor: Colors.black,
-                    child: Text(
-                      'R',
-                      textScaleFactor: 1.5,
-                    ),
-                    onPressed: () {
-                      setState(() {});
-                    }),
-              )),
-          //R
-          */
+          
 
+          Padding(
+            padding: EdgeInsets.only(
+              top: 50,
+              left: 30,
+              right: 20,
+            ),
+            child: DropdownButton<String>(
+              items: _experience.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                        color: Colors.blue[900],
+                        fontSize: 18,
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.bold),
+                  ),
+                );
+              }).toList(),
+              value: _currentvalueselected,
+              onChanged: (String newValue) {
+                _actiononchange(newValue);
+              },
+            ),
+          ),  
 
           Padding(
               padding: EdgeInsets.only(
-                top: 30,
                 left: 20,
                 right: 20,
               ),
-              child: AutoCompleteTextField(
+              child: projectTextField = AutoCompleteTextField<String>(
+                key: key,
+                suggestions: projectList,
+                clearOnSubmit: false,
                 decoration: new InputDecoration(
-                  //suffixIcon: Container(
-                  //width: 85.0,
-                  //height: 60.0,
-                  //),
                   contentPadding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
                   // filled: true,
                   hintText: 'Project Name',
@@ -323,7 +240,24 @@ class HiringManagerAddRequirementTestState
                 ),
                 style: new TextStyle(
                   fontFamily: "Poppins",
+                  color: Colors.blue[900],
+                  fontSize: 18
                 ),
+                itemFilter: (item,query){
+                  return item.toLowerCase().startsWith(query.toLowerCase());
+                },  
+                itemSorter: (a,b){
+                  return a.compareTo(b);
+                },
+                itemSubmitted: (item){
+                  setState(() {
+                    projectTextField.textField.controller.text = item;
+                  });
+                },
+                itemBuilder: (context, item){
+                  //ui for autocomplete row
+                  return row(item);
+                }
               )),
           // Project Name
 
@@ -333,6 +267,8 @@ class HiringManagerAddRequirementTestState
                 right: 20,
               ),
               child: AutoCompleteTextField(
+                controller: customerController,
+                //itemSubmitted: ,
                 decoration: new InputDecoration(
                   //suffixIcon: Container(
                   //width: 85.0,
@@ -369,14 +305,41 @@ class HiringManagerAddRequirementTestState
                       'Save',
                       textScaleFactor: 1.5,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _save();
-                      });
-                    }),
+                    onPressed: () async{ 
+                      String primarySkillName = getPrimarySkill();
+                      List<String> secondarySkillsNames = getSecondarySkills();
+                      List<String> softSkillsNames = getSoftSkills();
+
+                      print(primarySkillName);
+                      print(secondarySkillsNames);
+                      print(softSkillsNames);
+                      print(_currentvalueselected);
+                      print(projectTextField.textField.controller.text);
+                      print(customerController.text);
+                      var result = await DatabaseService()
+                      .updateRequirementCollection(Requirement(primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text),user); // Update it
+                      //_save();
+                    } 
+                    ),
               ))
         ],
       ),
+    );
+  }
+
+  Widget row(String projectName){
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Row(
+      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(projectName,
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.blue[900]
+        ),)
+      ],
+    ),
     );
   }
 
@@ -408,5 +371,79 @@ class HiringManagerAddRequirementTestState
     }else{
       return Colors.grey;
     }
+  }
+
+  void _actiononchange(String newValue) {
+    setState(() {
+      this._currentvalueselected = newValue;
+    });
+  }
+
+  String getPrimarySkill(){
+    int counter=-1;
+    int pos=0;
+    String returnVal = '';
+
+    for (bool val in longpressAttention){
+      counter++;
+      if (val == true){
+        pos = counter;  
+        break;
+      }
+    }
+
+    counter=-1;
+    for (String skill in allSkills){
+      counter++;
+      if (counter == pos){
+        returnVal = skill;    
+      }
+    }
+    return returnVal;
+  }
+
+  List<String> getSecondaryAndSoftSkills(){
+    List<String> returnVal = List();
+
+    int counter=-1;
+    List<int> positions = List();
+
+    for (bool val in pressAttention){
+      counter++;
+      if (val == true){
+        positions.add(counter);  
+      }
+    }
+
+    counter=-1;
+    for (String skill in allSkills){
+      counter++;
+      if (positions.contains(counter)){
+        returnVal.add(skill);    
+      }
+    }
+    return returnVal;
+  }
+  
+  List<String> getSecondarySkills(){
+    List<String> returnVal = List();
+    List<String> bothSkills = getSecondaryAndSoftSkills();
+    for (String skill in bothSkills){
+        if (secondarySkills.contains(skill)){
+            returnVal.add(skill);
+        }
+    }
+    return returnVal;
+  }
+
+  List<String> getSoftSkills(){
+    List<String> returnVal = List();
+    List<String> bothSkills = getSecondaryAndSoftSkills();
+    for (String skill in bothSkills){
+        if (softSkills.contains(skill)){
+            returnVal.add(skill);
+        }
+    }
+    return returnVal;
   }
 }

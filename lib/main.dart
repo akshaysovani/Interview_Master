@@ -5,6 +5,7 @@ import 'package:interview_master/screens/adminaddemployee.dart';
 import 'package:interview_master/screens/adminseeemployees.dart';
 import 'package:interview_master/screens/authenticate/newuserregister.dart';
 import 'package:interview_master/screens/authenticate/signin.dart';
+import 'package:interview_master/screens/hiringmanagerhome.dart';
 import 'package:interview_master/screens/startpage.dart';
 //import 'package:interview_master/screens/loginpage.dart';
 import 'package:interview_master/screens/hiringmanagerseerequirement.dart';
@@ -67,6 +68,7 @@ class InterviewApp extends StatelessWidget {
         //home: HiringManagerAddRequirement(),
         //home: HiringManagerAddRequirementTest(),
         //home: HiringManagerSeeRequirements()
+        //home: HiringManagerHomePage()
         //home: LoginPage()
         home: Wrapper()
 
