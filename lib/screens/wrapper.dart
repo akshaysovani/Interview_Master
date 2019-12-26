@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:interview_master/models/user.dart';
-import 'package:interview_master/models/userwithrole.dart';
 import 'package:interview_master/screens/authenticate/authenticate.dart';
 import 'package:interview_master/screens/hiringmanagerhome.dart';
 import 'package:interview_master/screens/hiringmanagerseerequirement.dart';

@@ -26,9 +26,9 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
     if (candidateList == null) {
       candidateList = List<Candidate>();
 
-      candidateList.add(Candidate(1, 'Akshay Sovani', 'Developer', 'Java'));
+      /* candidateList.add(Candidate(1, 'Akshay Sovani', 'Developer', 'Java'));
       candidateList.add(Candidate(1, 'Sanket Karandikar', 'Fresher', 'C++'));
-      candidateList.add(Candidate(1, 'Nachiket Gundi', 'Architect', 'Java'));
+      candidateList.add(Candidate(1, 'Nachiket Gundi', 'Architect', 'Java')); */
 
       /*requirementList[0].id = 1;
       requirementList[0].title = 'Java';
@@ -86,7 +86,7 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21, color: Colors.blue[900]),
               ),
               subtitle: Text(
-                this.candidateList[position].experience_level,
+                this.candidateList[position].experienceLevel,
                 style: TextStyle(
                     fontSize: 16, fontWeight: FontWeight.w500
                 ),

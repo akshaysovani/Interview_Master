@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/user.dart';
-import 'package:interview_master/models/userwithrole.dart';
+
 
 class DatabaseService {
   final String uid;
@@ -10,6 +11,7 @@ class DatabaseService {
 
   final CollectionReference userCollection = Firestore.instance.collection('user');
   final CollectionReference requirementCollection = Firestore.instance.collection('requirement');
+  final CollectionReference candidateCollection = Firestore.instance.collection('candidate');
 
   Future updateUserCollection(String fullName, String role) async{
       return await userCollection.document(uid).setData({
@@ -40,11 +42,11 @@ class DatabaseService {
   }  
 
 
-  //call this from add requirement of HM
-  Future updateRequirementCollection(Requirement requirement, User user) async{
+  //Add new requirement
+  Future addNewRequirement(Requirement requirement, User user) async{
       String name = await getName(user);
       print(name);
-      return await requirementCollection.document(uid).setData({
+      final docref = await requirementCollection.add({
         //'id': requirement.id,
         'primarySkill': requirement.primarySkill,
         'secondarySkills': requirement.secondarySkills,
@@ -54,15 +56,41 @@ class DatabaseService {
         //'customerName': requirement.customerName,
         'owner': name,
       });
-  } 
+      String docId = docref.documentID;
+      print('new Id is: '+ docId);
+      final _docRef = await requirementCollection.document(docId).setData({
+         'id': docId,    
+      }, merge: true);
+    } 
+
+  //Edit current requirement
+  Future editCurrentRequirement(Requirement requirement, User user) async{
+      String name = await getName(user);
+      print(name);
+      final _docRef = await requirementCollection.document(requirement.id).setData({
+        'primarySkill': requirement.primarySkill,
+        'secondarySkills': requirement.secondarySkills,
+        'softSkills': requirement.softSkills,
+        'experienceLevel': requirement.experienceLevel,
+        'projectName': requirement.projectName,
+        //'customerName': requirement.customerName,
+        'owner': name,
+      }, merge: true);
+  }
+
+  //Delete current requirement
+  Future deleteCurrentRequirement(Requirement requirement) async{
+    final result = await requirementCollection.document(requirement.id).delete();
+  }
 
   //Get list of Requirement objects from snapshot
   List<Requirement> getRequirementList(QuerySnapshot querySnapshot){
     return querySnapshot.documents.map((doc){
       return Requirement(
+        id: doc.data['id'] ?? '',
         primarySkill: doc.data['primarySkill'] ?? '',
-        //secondarySkills: doc.data['secondarySkills'] ?? [],// Problematic  want to insert List<String> instead of List<dynamic>
-        //softSkills: doc.data['softSkills'] ?? '',
+        secondarySkills: doc.data['secondarySkills'] ?? [],// Problematic  want to insert List<String> instead of List<dynamic>
+        softSkills: doc.data['softSkills'] ?? '',
         experienceLevel: doc.data['experienceLevel'] ?? '',
         projectName: doc.data['projectName'] ?? '',
         owner: doc.data['owner'] ?? ''
@@ -77,55 +105,46 @@ class DatabaseService {
   }
 
 
+  //Add new Candidate
+  Future addNewCandidate(Candidate candidate) async{
+      //String name = await getName(user);
+      //print(name);
+      final docref = await candidateCollection.add({
+        //'id': requirement.id,
+        'name': candidate.name,
+        'primarySkill': candidate.primarySkill,
+        'secondarySkills': candidate.secondarySkills,
+        'softSkills': candidate.softSkills,
+        'experienceLevel': candidate.experienceLevel,
+        'projectName': candidate.projectName,
+        'roundsInfo': candidate.roundsInfo
+      });
 
-
-/* 
-  List<UserWithRole> getAllUsersWithRoles(){
-      return userCollection.snapshots().map(_userListFromSnapshot);
-  }
-
-  List<UserWithRole> _userListFromSnapshot(QuerySnapshot querySnapshot){
-    return querySnapshot.documents.map((doc){
-        return UserWithRole(
-          id: doc.data['']      
-        );
-    });
-  }
- */
-
-/*   getData() async {
-  return await Firestore.instance.collection('user').getDocuments();
-  } */
-
-
- 
- /*  void getRoleForThisUser() async {
-      DocumentReference document = await Firestore.instance.collection('user').document(uid);
-      //document.
-      
-      print('hey' + documentReference.documentID);
-      //String a = documentReference.get();
+      String docId = docref.documentID;
+      print('new Id is: '+ docId);
+      final _docRef = await candidateCollection.document(docId).setData({
+        'id': docId,    
+      }, merge: true);
     }
-     */
 
-
-/*     FirebaseAuth.instance.currentUser().then((user){
-    Firestore.instance
-    .collection('/user')
-    .where('id', isEqualTo: uid)               //user --> Current logged in user  
-    .getDocuments()
-    .then((docs){
-       if (docs.documents[0].exists){
-         print('doc exists');
-         return docs.documents[0].data['role'];
-       } 
-    });
-    });
-    return null; */
-
-
+    List<Candidate> getCandidateList(QuerySnapshot querySnapshot){
+    return querySnapshot.documents.map((doc){
+      return Candidate(
+        id: doc.data['id'] ?? '',
+        name: doc.data['name'] ?? '',
+        primarySkill: doc.data['primarySkill'] ?? '',
+        secondarySkills: doc.data['secondarySkills'] ?? [],// Problematic  want to insert List<String> instead of List<dynamic>
+        softSkills: doc.data['softSkills'] ?? '',
+        experienceLevel: doc.data['experienceLevel'] ?? '',
+        projectName: doc.data['projectName'] ?? '',
+        roundsInfo: doc.data['projectName'] ?? [],
+      );
+    }).toList();
   }
 
-  /* Stream<QuerySnapshot> get users{
-    return userCollection.snapshots();
-  } */
+  Stream<List<Candidate>> get candidates{
+      return candidateCollection.snapshots()
+      .map(getCandidateList);
+  } 
+
+}

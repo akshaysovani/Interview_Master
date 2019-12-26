@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class HiringManagerAddRequirementTest extends StatefulWidget {
-
   Requirement requirement;
   String addOrEdit;
 
@@ -29,11 +28,7 @@ class HiringManagerAddRequirementTestState
   var _experience = ['Fresher', 'Developer', 'Lead', 'Architect'];
   var _currentvalueselected = '';
 
-  initState() {
-    super.initState();
-    _currentvalueselected = _experience[0];
-  }
-
+  bool firstTimeLoad;
   Requirement requirement;
   String addOrEdit;
 
@@ -49,11 +44,30 @@ class HiringManagerAddRequirementTestState
   List<String> projectList;
   AutoCompleteTextField projectTextField;
   GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
- 
+
+  initState() {
+    firstTimeLoad = true;
+    super.initState();
+    if (requirement.primarySkill != null){                      //edit requirement  
+      //print('inside setstate: '+requirement.experienceLevel);
+          _currentvalueselected = requirement.experienceLevel;
+      
+          WidgetsBinding.instance.addPostFrameCallback((_) =>
+          key.currentState.textField.controller.text = requirement.projectName);
+
+          //projectTextField.textField.controller.text = requirement.projectName;    
+      
+      //projectTextField.textField.controller.text = requirement.projectName;
+      //customerTextField.textField.controller.text = requirement.customerName;
+    }else{                                                      //add new requirement  
+      _currentvalueselected = _experience[0];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController projectController = TextEditingController();
-    TextEditingController customerController = TextEditingController();
+    //TextEditingController projectController = TextEditingController();
+    //TextEditingController customerController = TextEditingController();
     //AutoCompleteTextField
 
     User user = Provider.of<User>(context);
@@ -117,7 +131,72 @@ class HiringManagerAddRequirementTestState
       for (int i=0;i<allSkills.length;i++){
         longpressAttention.add(false);
       }
+    }  
+
+    //Initial skills colour load
+    if (firstTimeLoad){
+      if (requirement.primarySkill != null){                      //edit requirement  
+        String reqPrimarySkill = requirement.primarySkill;
+        List<dynamic> reqSecondarySkills = requirement.secondarySkills;
+        List<dynamic> reqSoftSkills = requirement.softSkills;
+        
+        //Setting up primary skill 
+        int counter=-1;
+        int pos=0;
+        for (String skill in allSkills){
+          counter++;
+          if (skill == reqPrimarySkill){
+            pos = counter;  
+            break;
+          }
+        }
+        //counter=-1;
+        for (int i=0;i<longpressAttention.length;i++){
+          if (i==pos){
+            longpressAttention[i] = !longpressAttention[i];
+          }
+        }
+
+        //Setting up secondary skills
+        for (String secSkill in reqSecondarySkills){
+          counter=-1;
+          pos=0;
+          for (String skill in allSkills){
+            counter++;
+            if (skill == secSkill){
+              pos = counter;  
+              break;
+            }
+          }  
+          for (int i=0;i<pressAttention.length;i++){
+            if (i==pos){
+              pressAttention[i] = !pressAttention[i];
+            }
+          }
+        }
+
+        //Setting up soft skills
+        for (String softSkill in reqSoftSkills){
+          counter=-1;
+          pos=0;
+          for (String skill in allSkills){
+            counter++;
+            if (skill == softSkill){
+              pos = counter;  
+              break;
+            }
+          }  
+          for (int i=0;i<pressAttention.length;i++){
+            if (i==pos){
+              pressAttention[i] = !pressAttention[i];
+            }
+          }
+        }
+
+      } 
+      firstTimeLoad = false;
     }
+
     //for (int i=0;i<allSkills.length;i++){
       //debugPrint(pressAttention[i].toString());
     //}
@@ -267,7 +346,7 @@ class HiringManagerAddRequirementTestState
                 right: 20,
               ),
               child: AutoCompleteTextField(
-                controller: customerController,
+                //controller: customerController,
                 //itemSubmitted: ,
                 decoration: new InputDecoration(
                   //suffixIcon: Container(
@@ -310,15 +389,21 @@ class HiringManagerAddRequirementTestState
                       List<String> secondarySkillsNames = getSecondarySkills();
                       List<String> softSkillsNames = getSoftSkills();
 
-                      print(primarySkillName);
+                      /* print(primarySkillName);
                       print(secondarySkillsNames);
                       print(softSkillsNames);
                       print(_currentvalueselected);
                       print(projectTextField.textField.controller.text);
-                      print(customerController.text);
-                      var result = await DatabaseService()
-                      .updateRequirementCollection(Requirement(primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text),user); // Update it
-                      //_save();
+                      print(customerController.text); */
+
+                      if (requirement.primarySkill == null){      //adding new requirement 
+                        var result = await DatabaseService()
+                        .addNewRequirement(Requirement(primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text),user); // Update it
+                      }else{                                    //Editing current requirement
+                        var result = await DatabaseService()
+                        .editCurrentRequirement(Requirement(id: requirement.id, primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text),user); // Update it                        
+                      }
+                      _save();                      
                     } 
                     ),
               ))
@@ -349,7 +434,7 @@ class HiringManagerAddRequirementTestState
 
   void _save(){
     goToHiringManagerSeeRequirements();
-    _showAlertDialogue('Success', 'Requirement Added');
+    _showAlertDialogue('Success', 'Requirement Saved');
   }
 
   void _showAlertDialogue(String title,String msg){

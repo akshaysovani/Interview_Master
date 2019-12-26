@@ -30,9 +30,9 @@ class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> 
     if (candidateList == null) {
       candidateList = List<Candidate>();
 
-      candidateList.add(Candidate(1, 'Sanket Karandikar', 'Fresher', 'C++'));
+      /* candidateList.add(Candidate(1, 'Sanket Karandikar', 'Fresher', 'C++'));
       candidateList.add(Candidate(2, 'Akshay Sovani', 'Developer', 'Java'));
-      candidateList.add(Candidate(3, 'Nachiket Gundi', 'Architect', 'Java'));
+      candidateList.add(Candidate(3, 'Nachiket Gundi', 'Architect', 'Java')); */
       /*requirementList[0].id = 1;
       requirementList[0].title = 'Java';
       requirementList[0].no_of_vacancies = 2;

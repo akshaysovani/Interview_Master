@@ -253,7 +253,7 @@ class HiringManagerAddRequirementState
                       textScaleFactor: 1.5,
                     ),
                     onPressed: () async{
-                      await DatabaseService().updateRequirementCollection(Requirement(),user); // Update it
+                      await DatabaseService().addNewRequirement(Requirement(),user); // Update it
                     }),
               ))
         ],

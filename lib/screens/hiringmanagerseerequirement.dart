@@ -21,9 +21,16 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
   
   @override
   Widget build(BuildContext context) {
-    requirementList = Provider.of<List<Requirement>>(context);
+    requirementList = Provider.of<List<Requirement>>(context) ?? [];
+    //print(requirementList); 
+
+    requirementList.forEach((requirement){
+      print('primary skill is' + requirement.primarySkill);
+    });
+
     if (requirementList == null) {
       requirementList = List<Requirement>();
+      //print(requirementList); 
       /* requirementList.add(Requirement(1, 'Java', ['Confidence','Communication'],'Developer','Project alpha',''));
       requirementList.add(Requirement(2, 'Python', ['Confidence','Communication'], 'Fresher','Project beta',''));
       requirementList.add(Requirement(3, 'C++', ['Confidence','Communication'], 'Developer','Project gamma',''));
@@ -59,7 +66,9 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                 //    color: Colors.black
                 ),
               ),*/
-              /* title: Text(
+              title: Padding(
+                padding: EdgeInsets.only(top: 5, bottom: 10),
+                child: Text(
                 //'\n'+
                 this.requirementList[position].primarySkill
                     + '  -  ' + this.requirementList[position].experienceLevel
@@ -68,10 +77,15 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                     color: Colors.blue[900],
                     fontFamily: 'Helvetica',
                     fontWeight: FontWeight.bold,
-                    fontSize: 18
+                    fontSize: 19
                 ),
-              ), */
-              /* subtitle: Text(
+              ),
+              ),
+
+
+              subtitle: Padding(
+                padding: EdgeInsets.only( bottom: 10),
+                child: Text(
                 //'\n' +
                 this.requirementList[position].projectName
                 //  + '\n'
@@ -82,15 +96,18 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                     fontWeight: FontWeight.bold,
                     fontSize: 15
                 ),
-              ), */
+              ),
+              ),
+
+
               trailing: SizedBox(
+                height: 40,
                 width: 80.0,
                 child: Row(
                   children: <Widget>[
                     Container(
                       //color: Colors.blue,
                       child: GestureDetector(
-
                         onTap: () {
                           String title = 'Edit - ' + this.requirementList[position].primarySkill + ' - ' + this.requirementList[position].experienceLevel;
                           goToHiringManagerAddRequirementTest(this.requirementList[position],title);
@@ -102,7 +119,9 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                     ),
                     Container(width: 25,),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                          var result = await DatabaseService().deleteCurrentRequirement(this.requirementList[position]);
+                        },
                       child: Icon(Icons.delete
                         //color: Colors.red,
                       ),

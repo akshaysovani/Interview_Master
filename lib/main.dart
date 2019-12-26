@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:interview_master/models/user.dart';
-import 'package:interview_master/models/userwithrole.dart';
 import 'package:interview_master/screens/adminaddemployee.dart';
 import 'package:interview_master/screens/adminseeemployees.dart';
 import 'package:interview_master/screens/authenticate/newuserregister.dart';
@@ -52,12 +51,11 @@ class InterviewApp extends StatelessWidget {
             ),
         debugShowCheckedModeBanner: false,
         title: 'Interview Helper',
-
         //home: RecruiterSeeRoundsOfCandidate(),
         //home: RecruiterAddCandidate(),
         //home: RecruiterSeeCandidatesByRequirement(),
         //home: RecruiterSeeRequirements()
-        //home: RecruiterSeeCandidatesAndRequirements()
+        home: RecruiterSeeCandidatesAndRequirements()
 
         //home: InterviewerEnterFeedback(),
         //home: InterviewerSeeRoundsOfCandidate()
@@ -70,14 +68,11 @@ class InterviewApp extends StatelessWidget {
         //home: HiringManagerSeeRequirements()
         //home: HiringManagerHomePage()
         //home: LoginPage()
-        home: Wrapper()
-
+        //home: Wrapper()
         //home: SignIn()
         //home: NewUserRegister()
     ),
       //)
-      
-      
       );
     
    

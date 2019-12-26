@@ -25,9 +25,9 @@ class RecruiterSeeCandidatesByRequirementState
   Widget build(BuildContext context) {
     if (candidateList == null) {
       candidateList = List<Candidate>();
-      candidateList.add(Candidate(1, 'Akshay Sovani', 'Developer', 'Java'));
+      /* candidateList.add(Candidate(1, 'Akshay Sovani', 'Developer', 'Java'));
       candidateList.add(Candidate(1, 'Sanket Karandikar', 'Fresher', 'C++'));
-      candidateList.add(Candidate(1, 'Nachiket Gundi', 'Architect', 'Java'));
+      candidateList.add(Candidate(1, 'Nachiket Gundi', 'Architect', 'Java')); */
     }
     return Scaffold(
         /*appBar: AppBar(
@@ -69,14 +69,14 @@ class RecruiterSeeCandidatesByRequirementState
             color: Colors.white,
             elevation: 2.0,
             child: ListTile(
-              title: Text(
+              /* title: Text(
                 this.candidateList[position].name,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 21,
                     color: Colors.blue[900]),
-              ),
-              trailing: SizedBox(
+              ), */
+              /* trailing: SizedBox(
                 width: 80.0,
                 child: Row(
                   children: <Widget>[
@@ -100,9 +100,9 @@ class RecruiterSeeCandidatesByRequirementState
                     )
                   ],
                 ),
-              ),
+              ), */
               onTap: (){
-                goToRecruiterSeeRoundsOfCandidate(this.candidateList[position].name);
+                //goToRecruiterSeeRoundsOfCandidate(this.candidateList[position].name);
               },
             ),
           );

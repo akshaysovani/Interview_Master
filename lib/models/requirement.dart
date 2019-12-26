@@ -1,10 +1,10 @@
 import 'package:interview_master/models/user.dart';
 
 class Requirement {
-  int id;
+  String id;
   String primarySkill;
-  List<String> secondarySkills;
-  List<String> softSkills;
+  List<dynamic> secondarySkills;
+  List<dynamic> softSkills;
   String experienceLevel;
   String projectName;
   String customerName;
@@ -15,7 +15,7 @@ class Requirement {
   //int _priority;
 
   //  Requirement(this._title, this._no_of_vacancies, this._date_updated);
-  Requirement({this.primarySkill, this.secondarySkills, this.softSkills, this.experienceLevel, this.projectName, this.customerName, this.owner});
+  Requirement({this.id, this.primarySkill, this.secondarySkills, this.softSkills, this.experienceLevel, this.projectName, this.customerName, this.owner});
   // Note.withID(this._id, this._title, this._date, this._priority, // withID is the name of the constructor.
   //   [this._description]);
 

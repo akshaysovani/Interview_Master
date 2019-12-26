@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:interview_master/models/user.dart';
-import 'package:interview_master/models/userwithrole.dart';
 import 'package:interview_master/services/database.dart';
 
 
@@ -12,9 +11,6 @@ User getUserFromFirebaseUser(FirebaseUser user){
   return user!=null ? User(id: user.uid) : null;
 }
 
-UserWithRole getUserWithRoleFromFirebaseUser(FirebaseUser user, String role){
-  return user!=null ? UserWithRole(user.uid,role) : null;
-}
 
 //Stream of Firebaseuser on change of auth state   //User if signing in else null if user signs out.  
 Stream<User> get user{
