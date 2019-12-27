@@ -50,7 +50,7 @@ class _WrapperState extends State<Wrapper> {
              }
              else if (snapshot.data == 'Hiring Manager'){
                 //return HiringManagerSeeRequirements();
-                return HiringManagerHomePage();
+                return HiringManagerSeeRequirements();
              }
              else if (snapshot.data == 'Recruiter'){
                 //return HiringManagerSeeRequirements();

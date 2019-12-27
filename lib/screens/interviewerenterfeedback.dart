@@ -1,31 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:interview_master/models/candidate.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/radiobuttonmodel.dart';
+import 'package:interview_master/models/round.dart';
+import 'package:interview_master/services/database.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class InterviewerEnterFeedback extends StatefulWidget {
-  String candidateName;
-  InterviewerEnterFeedback(this.candidateName);
+  Candidate candidate;
+
+  InterviewerEnterFeedback(this.candidate);
 
   @override
   State<StatefulWidget> createState() {
-    return InterviewerEnterFeedbackState(this.candidateName);
+    return InterviewerEnterFeedbackState(this.candidate);
   }
 }
 
 class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
-  String candidateName;
-  InterviewerEnterFeedbackState(this.candidateName);
+  Candidate candidate;
+  String status='';
+
+  InterviewerEnterFeedbackState(this.candidate);
 
   int _radioCurrentValue = 1;
   String _currentText = '';
 
   List<RadioButtonModel> _radioList;
+  
+  TextEditingController roundNumberController = TextEditingController();
+  TextEditingController feedbackController = TextEditingController();
+
+  AutoCompleteTextField interviewerTextField;
+  GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
+  List<String> interviewerList;
+
+  initState() {
+    super.initState();
+    if (this.candidate.roundsInfo.isEmpty){
+      roundNumberController.text = '1'; 
+    }else{
+      roundNumberController.text = this.candidate.roundsInfo.last.roundNumber;   
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +56,17 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
       _radioList.add(RadioButtonModel(1, 'Pass'));
       _radioList.add(RadioButtonModel(2, 'Fail'));
     }
+    if (interviewerList == null){
+      interviewerList = List();
+      interviewerList.add('Interviewer 1');
+      interviewerList.add('Interviewer 2');
+      interviewerList.add('Interviewer 3');
+    }
 
     TextStyle textStyle = Theme.of(context).textTheme.subtitle;
     return Scaffold(
       appBar: AppBar(
-        title: Text(candidateName),
+        title: Text(this.candidate.name),
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -66,13 +94,20 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
             ),
             child: TextField(
               keyboardType: TextInputType.number,
-              style: textStyle,
-              //controller: tc,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  //color: Colors.blue[900], 
+                  fontSize: 17,
+                  fontFamily: 'Open Sans'
+              ),
+              controller: roundNumberController,
               decoration: InputDecoration(
                 labelText: 'Interview Round Number',
                 hintText: 'e.g. 2',
                 labelStyle: TextStyle(
-                  color: Colors.blue[900], fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[900], 
+                  fontSize: 22,
                   fontFamily: 'Open Sans'
                 ),
               ),
@@ -81,25 +116,42 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
 
           Padding(
               padding: EdgeInsets.only(
-                top: 20,
-                left: 20,
+                //top: 10,
+                left: 10,
                 right: 20,
               ),
-              child: AutoCompleteTextField(
+              child: interviewerTextField = AutoCompleteTextField<String>(
+                key: key,
+                suggestions: interviewerList,
+                clearOnSubmit: false,
                 decoration: new InputDecoration(
-                  //suffixIcon: Container(
-                  //width: 85.0,
-                  //height: 60.0,
-                  //),
-                  //contentPadding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
-                  // filled: true,
-                  labelText: 'Interviewer Name',
-                  //hintText: 'Customer Name',
-                  labelStyle: TextStyle(color: Colors.blue[900], fontSize: 18, fontFamily: 'Open Sans',fontWeight: FontWeight.bold),
+                  contentPadding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+                  //labelText: 'Interviewer Name',
+                  hintText: 'Interviewer Name',
+                  //labelStyle: TextStyle(color: Colors.blue[900], fontSize: 18, fontFamily: 'Open Sans',fontWeight: FontWeight.bold),
+                  hintStyle: TextStyle(color: Colors.blue[900]),
                 ),
                 style: new TextStyle(
-                    fontFamily: 'Open Sans'
+                    fontWeight: FontWeight.bold,
+                  color: Colors.black, 
+                  fontSize: 17,
+                  fontFamily: 'Open Sans'
                 ),
+                itemFilter: (item,query){
+                  return item.toLowerCase().startsWith(query.toLowerCase());
+                },  
+                itemSorter: (a,b){
+                  return a.compareTo(b);
+                },
+                itemSubmitted: (item){
+                  setState(() {
+                    interviewerTextField.textField.controller.text = item;
+                  });
+                },
+                itemBuilder: (context, item){
+                  //ui for autocomplete row
+                  return row(item);
+                }
               )),
           // Interviewer Name
 
@@ -110,8 +162,13 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
               right: 20,
             ),
             child: TextField(
-              style: textStyle,
-              //controller: tc,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                  //color: Colors.blue[900], 
+                  fontSize: 17,
+                  fontFamily: 'Open Sans'
+              ),
+              controller: feedbackController,
               decoration: InputDecoration(
                 labelText: 'Feedback',
                 //hintText: 'Good in Java Spring, etc',
@@ -148,7 +205,7 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
 
           Padding(
               padding: EdgeInsets.only(
-                top: 40,
+                top: 70,
                 left: 20,
                 right: 20,
               ),
@@ -165,10 +222,17 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
                       'Save',
                       textScaleFactor: 1.5,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _save();
-                      });
+                    onPressed: () async {
+                      print(roundNumberController.text);
+                      print(interviewerTextField.textField.controller.text);
+                      print(feedbackController.text);
+                      if (_radioCurrentValue == 1){
+                        status = 'Pass';  
+                      }else{
+                        status = 'Fail';    
+                      }
+                      var result = await DatabaseService()
+                        .addNewRound(Round(roundNumber: roundNumberController.text, interviewerName: interviewerTextField.textField.controller.text, feedback: feedbackController.text, status: status),candidate); // Update it
                     }),
               ))
         ],
@@ -198,5 +262,21 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
 
   void goToInterviewerSeeRoundsOfCandidate(){
    Navigator.pop(context);
+  }
+
+  Widget row(String projectName){
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Row(
+      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(projectName,
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.blue[900]
+        ),)
+      ],
+    ),
+    );
   }
 }

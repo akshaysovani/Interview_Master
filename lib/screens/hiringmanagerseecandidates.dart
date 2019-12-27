@@ -3,46 +3,55 @@ import 'package:interview_master/screens/hiringmanagerseeroundsofcandidate.dart'
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/candidate.dart';
+import 'package:interview_master/services/database.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class HiringManagerSeeCandidates extends StatefulWidget {
-  String languageAndExperienceTitle;
+  Requirement requirement;
+  HiringManagerSeeCandidates(this.requirement);
 
-  HiringManagerSeeCandidates(this.languageAndExperienceTitle);
   @override
   State<StatefulWidget> createState() {
-    return HiringManagerSeeCandidatesState(this.languageAndExperienceTitle);
+    return HiringManagerSeeCandidatesState(this.requirement);
   }
 }
 
 class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> {
   //int count = 0;
-  String languageAndExperienceTitle;
-  HiringManagerSeeCandidatesState(this.languageAndExperienceTitle);
-
+  //String languageAndExperienceTitle;
+  HiringManagerSeeCandidatesState(this.requirement);
+  
+  Requirement requirement;
   List<Candidate> candidateList;
+  List<Candidate> candidateListForThisUser;
+
 
   @override
   Widget build(BuildContext context) {
+    candidateList = Provider.of<List<Candidate>>(context) ?? [];
+    /* candidateList.forEach((candidate){
+       print(candidate.experienceLevel); 
+    }); */
+
     if (candidateList == null) {
       candidateList = List<Candidate>();
-
-      /* candidateList.add(Candidate(1, 'Sanket Karandikar', 'Fresher', 'C++'));
-      candidateList.add(Candidate(2, 'Akshay Sovani', 'Developer', 'Java'));
-      candidateList.add(Candidate(3, 'Nachiket Gundi', 'Architect', 'Java')); */
-      /*requirementList[0].id = 1;
-      requirementList[0].title = 'Java';
-      requirementList[0].no_of_vacancies = 2;
-      //requirementList[0].date_updated = ;
-      requirementList[1].id = 2;
-      requirementList[1].title = 'Sales Representative';
-      requirementList[1].no_of_vacancies = 4;
-*/
-      // updateListView();
     }
+
+    if (candidateListForThisUser == null){
+      candidateListForThisUser = List<Candidate>();
+
+      for (Candidate candidate in candidateList){
+        if (candidate.primarySkill == requirement.primarySkill && candidate.experienceLevel == requirement.experienceLevel){
+          candidateListForThisUser.add(candidate);
+        }  
+      }
+    }
+
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +60,7 @@ class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> 
             onPressed: () {
               goToHiringManagerSeeRequirements();
             }),
-        title: Text(this.languageAndExperienceTitle),
+        title: Text(this.requirement.primarySkill + ' - ' +  this.requirement.experienceLevel),
       ),
       body: getListView(),
       /*floatingActionButton: FloatingActionButton(
@@ -66,14 +75,14 @@ class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> 
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: this.candidateList.length,
+        itemCount: this.candidateListForThisUser.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
             elevation: 2.0,
             child: ListTile(
               title: Text(
-                this.candidateList[position].name,
+                this.candidateListForThisUser[position].name,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue[900]),
               ),
               trailing: SizedBox(
@@ -87,7 +96,7 @@ class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> 
               ),
 
               onTap: (){
-                goToHiringManagerSeeRoundsOfCandidate(this.candidateList[position].name);
+                goToHiringManagerSeeRoundsOfCandidate(this.candidateListForThisUser[position]);
               },
             ),
           );
@@ -97,9 +106,9 @@ class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> 
     Navigator.pop(context);
   }
 
-  void goToHiringManagerSeeRoundsOfCandidate(String candidateName){
+  void goToHiringManagerSeeRoundsOfCandidate(Candidate candidate){
     Navigator.push(context, MaterialPageRoute(builder: (context){
-      return HiringManagerSeeRoundsOfCandidate(candidateName);
+      return HiringManagerSeeRoundsOfCandidate(candidate);
     }));
   }
 }

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/services/auth.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
@@ -23,6 +24,7 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
 
   @override
   Widget build(BuildContext context) {
+    candidateList = Provider.of<List<Candidate>>(context) ?? [];
     if (candidateList == null) {
       candidateList = List<Candidate>();
 
@@ -81,27 +83,39 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
             color: Colors.white,
             elevation: 2.0,
             child: ListTile(
-              title: Text(
+              title: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
                 this.candidateList[position].name,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21, color: Colors.blue[900]),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue[900]),
               ),
-              subtitle: Text(
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 5),
+                child: Text(
                 this.candidateList[position].experienceLevel,
                 style: TextStyle(
                     fontSize: 16, fontWeight: FontWeight.w500
                 ),
               ),
+              ),
+              
+              
               trailing: SizedBox(
                 width: 130,
-                child: Text(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
                     'Cleared Round 2',
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,
                       //    color: Colors.blue[900]
                     )
                 ),
+                )
+                ,
               ),
               onTap: (){
-                goToInterviewerSeeRoundsOfCandidate(this.candidateList[position].name);
+                goToInterviewerSeeRoundsOfCandidate(this.candidateList[position]);
               },
               /*trailing: SizedBox(
                 width: 80.0,
@@ -150,9 +164,9 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
     Navigator.pop(context);
   }
 
-  void goToInterviewerSeeRoundsOfCandidate(String candidateName){
+  void goToInterviewerSeeRoundsOfCandidate(Candidate candidate){
     Navigator.push(context, MaterialPageRoute(builder: (context){
-      return InterviewerSeeRoundsOfCandidate(candidateName);
+      return InterviewerSeeRoundsOfCandidate(candidate);
     }));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/screens/hiringmanagerseerequirement.dart';
 import 'package:interview_master/services/database.dart';
@@ -12,7 +13,9 @@ class HiringManagerHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamProvider<List<Requirement>>.value(
       value: DatabaseService().requirements,
-      child: Scaffold(
+      child: StreamProvider<List<Candidate>>.value(
+          value: DatabaseService().candidates,
+          child: Scaffold(
         appBar: AppBar(
           title: Text('Requirements'),
           actions: <Widget>[
@@ -35,6 +38,8 @@ class HiringManagerHomePage extends StatelessWidget {
       ),
       body: HiringManagerSeeRequirements(),
       ),
-    );
-  }
+      )
+    );  
+      
+   }
 }

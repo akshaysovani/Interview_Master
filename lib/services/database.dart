@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/requirement.dart';
+import 'package:interview_master/models/round.dart';
 import 'package:interview_master/models/user.dart';
 
 
@@ -89,7 +90,7 @@ class DatabaseService {
       return Requirement(
         id: doc.data['id'] ?? '',
         primarySkill: doc.data['primarySkill'] ?? '',
-        secondarySkills: doc.data['secondarySkills'] ?? [],// Problematic  want to insert List<String> instead of List<dynamic>
+        secondarySkills: doc.data['secondarySkills'] ?? [],
         softSkills: doc.data['softSkills'] ?? '',
         experienceLevel: doc.data['experienceLevel'] ?? '',
         projectName: doc.data['projectName'] ?? '',
@@ -107,8 +108,29 @@ class DatabaseService {
 
   //Add new Candidate
   Future addNewCandidate(Candidate candidate) async{
-      //String name = await getName(user);
-      //print(name);
+      /* List<List<String>> mainRoundInfoList = List();
+      List<String> roundInfoList = List();
+      for (Round round in candidate.roundsInfo){
+        String roundNumber = round.roundNumber;
+        String staus = round.status;
+        String interviewName = round.interviewerName;
+        String feedback = round.feedback;
+        roundInfoList.add(roundNumber);
+        roundInfoList.add(staus);
+        roundInfoList.add(interviewName);
+        roundInfoList.add(feedback);
+      }
+      mainRoundInfoList.add(roundInfoList); */
+
+      List<Map<String, dynamic>> listOfRounds = candidate.roundsInfo
+            .map((round) => {
+              'roundNumber': round.roundNumber,
+              'status': round.status,
+              'interviewerName': round.interviewerName, 
+              'feedback': round.feedback 
+            })
+            .toList(); 
+      
       final docref = await candidateCollection.add({
         //'id': requirement.id,
         'name': candidate.name,
@@ -117,7 +139,7 @@ class DatabaseService {
         'softSkills': candidate.softSkills,
         'experienceLevel': candidate.experienceLevel,
         'projectName': candidate.projectName,
-        'roundsInfo': candidate.roundsInfo
+        'roundsInfo': FieldValue.arrayUnion(listOfRounds)
       });
 
       String docId = docref.documentID;
@@ -127,7 +149,35 @@ class DatabaseService {
       }, merge: true);
     }
 
-    List<Candidate> getCandidateList(QuerySnapshot querySnapshot){
+    /* List<Round> getRoundInfo(List<Map<String, dynamic>> listOfRoundMapObjects){
+      List<Round> roundList = List();
+      for (Map<String, dynamic> map in listOfRoundMapObjects){
+        String roundNumber = map['roundNumber'];   
+        String status = map['status'];   
+        String interviewerName = map['interviewerName'];
+        String feedback = map['feedback'];
+        
+        Round round = Round(roundNumber: roundNumber, status: status, interviewerName: interviewerName, feedback: feedback);
+        roundList.add(round);
+      }
+      return roundList;    
+    } */
+
+    List<Round> getRoundInfo(List<dynamic> listOfRoundDynamicObjects){
+      List<Round> roundList = List();
+      listOfRoundDynamicObjects.forEach((map){
+        String roundNumber = map['roundNumber'];   
+        String status = map['status'];   
+        String interviewerName = map['interviewerName'];
+        String feedback = map['feedback'];
+        
+        Round round = Round(roundNumber: roundNumber, status: status, interviewerName: interviewerName, feedback: feedback);
+        roundList.add(round);
+      });
+      return roundList; 
+    }
+
+    List<Candidate> getCandidateList(QuerySnapshot querySnapshot){  
     return querySnapshot.documents.map((doc){
       return Candidate(
         id: doc.data['id'] ?? '',
@@ -137,7 +187,7 @@ class DatabaseService {
         softSkills: doc.data['softSkills'] ?? '',
         experienceLevel: doc.data['experienceLevel'] ?? '',
         projectName: doc.data['projectName'] ?? '',
-        roundsInfo: doc.data['projectName'] ?? [],
+        roundsInfo: getRoundInfo(doc.data['roundsInfo']) ?? [],
       );
     }).toList();
   }
@@ -145,6 +195,11 @@ class DatabaseService {
   Stream<List<Candidate>> get candidates{
       return candidateCollection.snapshots()
       .map(getCandidateList);
-  } 
+  }
 
+  Future addNewRound(Round round, Candidate candidate) async{
+    final _docRef = await candidateCollection.document(candidate.id).setData({
+        'roundsInfo': FieldValue.arrayUnion([round])
+    }, merge: true);
+  }
 }

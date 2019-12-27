@@ -30,11 +30,11 @@ class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandi
     if (roundsList == null) {
       roundsList = List<Round>();
 
-      roundsList.add(Round(1, 'Pass', 'Interviewer 1',
+     /*  roundsList.add(Round(1, 'Pass', 'Interviewer 1',
           'Excellent reading and writing skills, moderate communication skills, moderate technical skills'));
       roundsList.add(Round(2, 'Pass', 'Interviewer 2',
           'Nice reading and writing skills, moderate communication skills'));
-      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills'));
+      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills')); */
     }
 
     return Scaffold(
@@ -68,9 +68,9 @@ class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandi
             child: ListTile(
               title: Text(
                 '\n' +
-                    this.roundsList[position].round_number.toString() +
+                    this.roundsList[position].roundNumber.toString() +
                     '    ' +
-                    this.roundsList[position].interviewer_name,
+                    this.roundsList[position].interviewerName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Colors.blue[900]),
               ),
 

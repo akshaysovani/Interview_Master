@@ -1,20 +1,20 @@
 class Round {
-  int _round_number;
-  String _status;
-  String _interviewer_name;
-  String _feedback;
+  String roundNumber;
+  String status;
+  String interviewerName;
+  String feedback;
 
 //  String _date_updated;
 
   //int _priority;
 
 //  Requirement(this._title, this._no_of_vacancies, this._date_updated);
-  Round(this._round_number, this._status, this._interviewer_name,
-      this._feedback);
+  Round({this.roundNumber, this.status, this.interviewerName,
+      this.feedback});
 
   // Note.withID(this._id, this._title, this._date, this._priority, // withID is the name of the constructor.
   //   [this._description]);
-
+/* 
   int get round_number => _round_number;
 
   String get status => _status;
@@ -41,7 +41,7 @@ class Round {
 
   set feedback(String newFeedback) {
     this._feedback = newFeedback;
-  }
+  } */
 /*set date_updated(String newDate) {
     this._date_updated = newDate;
   }*/

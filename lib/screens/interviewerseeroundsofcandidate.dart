@@ -10,32 +10,32 @@ import 'package:interview_master/models/round.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class InterviewerSeeRoundsOfCandidate extends StatefulWidget {
-  String candidateName;
-  InterviewerSeeRoundsOfCandidate(this.candidateName);
+  Candidate candidate;
+  InterviewerSeeRoundsOfCandidate(this.candidate);
 
   @override
   State<StatefulWidget> createState() {
-    return InterviewerSeeRoundsOfCandidateState(this.candidateName);
+    return InterviewerSeeRoundsOfCandidateState(this.candidate);
   }
 }
 
 class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfCandidate> {
   //int count = 0;
-  String candidateName;
-  InterviewerSeeRoundsOfCandidateState(this.candidateName);
+  Candidate candidate;
+  InterviewerSeeRoundsOfCandidateState(this.candidate);
 
   List<Round> roundsList;
 
   @override
   Widget build(BuildContext context) {
     if (roundsList == null) {
-      roundsList = List<Round>();
-
-      roundsList.add(Round(1, 'Pass', 'Interviewer 1',
+      //roundsList = List<Round>();
+      roundsList = this.candidate.roundsInfo;
+      /* roundsList.add(Round(1, 'Pass', 'Interviewer 1',
           'Excellent reading and writing skills, moderate communication skills, moderate technical skills'));
       roundsList.add(Round(2, 'Pass', 'Interviewer 2',
           'Nice reading and writing skills, moderate communication skills'));
-      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills'));
+      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills')); */
       /*requirementList[0].id = 1;
       requirementList[0].title = 'Java';
       requirementList[0].no_of_vacancies = 2;
@@ -55,13 +55,19 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
               // goToPreviousPage();
               goToInterviewerSeeCandidates();
             }),
-        title: Text(this.candidateName),
+        title: Text(this.candidate.name),
       ),
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[900],
         onPressed: () {
-          goToInterviewerEnterFeedback(this.candidateName);
+          print(this.candidate.roundsInfo);
+          if (this.candidate.roundsInfo.isEmpty){     //yet to be interviewed even once
+            goToInterviewerEnterFeedback(this.candidate);
+          }/* else{
+            goToInterviewerEnterFeedback(this.candidate.name,this.candidate.roundsInfo.last.roundNumber+1);  
+          } */
+          
         },
         tooltip: 'Add Next Round Feedback',
         child: Icon(Icons.add, color: Colors.white,),
@@ -82,9 +88,9 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
             child: ListTile(
               title: Text(
                 '\n' +
-                    this.roundsList[position].round_number.toString() +
+                    this.roundsList[position].roundNumber.toString() +
                     '    ' +
-                    this.roundsList[position].interviewer_name,
+                    this.roundsList[position].interviewerName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Colors.blue[900]),
               ),
 
@@ -160,12 +166,14 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
           );
         });
   }
+  
   void goToInterviewerSeeCandidates(){
     Navigator.pop(context);
   }
-  void goToInterviewerEnterFeedback(String candidateName){
+
+  void goToInterviewerEnterFeedback(Candidate candidate){
     Navigator.push(context, MaterialPageRoute(builder: (context){
-      return InterviewerEnterFeedback(candidateName);
+      return InterviewerEnterFeedback(candidate);
     }));
   }
 }

@@ -23,7 +23,7 @@ class RecruiterSeeCandidatesAndRequirementsState
   List<Requirement> requirementList;
 
   Icon searchIcon = Icon(Icons.search);
-  Widget searchBar = Text('Interview Helper');
+  Widget searchBar = Text('Interview Master');
 
   TextEditingController _controller = TextEditingController();
   bool _isSearching;

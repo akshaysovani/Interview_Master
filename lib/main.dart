@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:interview_master/models/requirement.dart';
+import 'package:interview_master/models/round.dart';
 import 'package:interview_master/models/user.dart';
 import 'package:interview_master/screens/adminaddemployee.dart';
 import 'package:interview_master/screens/adminseeemployees.dart';
@@ -25,7 +27,10 @@ import 'package:interview_master/screens/recruiterseeroundsofcandidate.dart';
 //import 'package:interview_master/screens/loginpage.dart';
 import 'package:interview_master/screens/wrapper.dart';
 import 'package:interview_master/services/auth.dart';
+import 'package:interview_master/services/database.dart';
 import 'package:provider/provider.dart';
+
+import 'models/candidate.dart';
 
 void main() {
   runApp(InterviewApp());
@@ -34,7 +39,48 @@ void main() {
 class InterviewApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(    // listen to user
+    return MultiProvider(
+      providers: [
+        StreamProvider<User>.value(value: AuthService().user),
+        StreamProvider<List<Requirement>>.value(
+            value: DatabaseService().requirements),
+        StreamProvider<List<Candidate>>.value(
+            value: DatabaseService().candidates),
+      ],
+      child: MaterialApp(
+          theme: ThemeData(
+              //brightness: Brightness.dark,
+              primaryColor: Colors.blue[900],
+              accentColor: Colors.grey[200],
+              fontFamily: 'Open Sans'
+              //backgroundColor: Colors.grey,
+              ),
+          debugShowCheckedModeBanner: false,
+          title: 'Interview Helper',
+          //home: RecruiterSeeRoundsOfCandidate(),
+          //home: RecruiterAddCandidate(),
+          //home: RecruiterSeeCandidatesByRequirement(),
+          //home: RecruiterSeeRequirements()
+          //home: RecruiterSeeCandidatesAndRequirements()
+          //home: InterviewerEnterFeedback(),
+          //home: InterviewerSeeRoundsOfCandidate()
+          //home: InterviewerSeeCandidates()
+          //home: InterviewerFirstPage()
+          //home: HiringManagerSeeRoundsOfCandidate()
+          //home: HiringManagerSeeCandidates()
+          //home: HiringManagerAddRequirement(),
+          //home: HiringManagerAddRequirementTest(),
+          //home: HiringManagerSeeRequirements()
+          //home: HiringManagerHomePage()
+          //home: LoginPage()
+          home: Wrapper()
+          //home: SignIn()
+          //home: NewUserRegister()
+          ),
+      //)
+    );
+
+    /* return StreamProvider<User>.value(    // listen to user
       value: AuthService().user,
       //child:  StreamProvider<User>.value(   // listen to 
         //value: AuthService().userwithsds,
@@ -55,7 +101,7 @@ class InterviewApp extends StatelessWidget {
         //home: RecruiterAddCandidate(),
         //home: RecruiterSeeCandidatesByRequirement(),
         //home: RecruiterSeeRequirements()
-        home: RecruiterSeeCandidatesAndRequirements()
+        //home: RecruiterSeeCandidatesAndRequirements()
 
         //home: InterviewerEnterFeedback(),
         //home: InterviewerSeeRoundsOfCandidate()
@@ -68,13 +114,11 @@ class InterviewApp extends StatelessWidget {
         //home: HiringManagerSeeRequirements()
         //home: HiringManagerHomePage()
         //home: LoginPage()
-        //home: Wrapper()
+        home: Wrapper()
         //home: SignIn()
         //home: NewUserRegister()
     ),
       //)
-      );
-    
-   
+      ); */
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/screens/hiringmanageraddrequirementtest.dart';
 import 'package:interview_master/screens/hiringmanageraddrequirement.dart';
 import 'package:interview_master/screens/hiringmanagerseecandidates.dart';
@@ -18,15 +19,11 @@ class HiringManagerSeeRequirements extends StatefulWidget {
 class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequirements> {
   int count = 0;
   List<Requirement> requirementList;
+  final AuthService _authService = AuthService();
   
   @override
   Widget build(BuildContext context) {
     requirementList = Provider.of<List<Requirement>>(context) ?? [];
-    //print(requirementList); 
-
-    requirementList.forEach((requirement){
-      print('primary skill is' + requirement.primarySkill);
-    });
 
     if (requirementList == null) {
       requirementList = List<Requirement>();
@@ -36,8 +33,30 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
       requirementList.add(Requirement(3, 'C++', ['Confidence','Communication'], 'Developer','Project gamma',''));
       requirementList.add(Requirement(4, 'Java', ['Confidence','Communication'], 'Architect','Project gamma','')); */
     }
-    
-    return Scaffold(
+
+    return StreamProvider<List<Candidate>>.value(
+      value: DatabaseService().candidates,
+      child: Scaffold(
+      appBar: AppBar(
+          title: Text('Requirements'),
+          actions: <Widget>[
+            FlatButton.icon(
+              icon: Icon(Icons.person, color: Colors.white,),
+              label: Text('Logout', style: TextStyle(color: Colors.white,
+                    fontFamily: 'Helvetica',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),),
+              onPressed: () async{
+                await _authService.signOut();
+              },
+            )
+          ],
+          /* leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                goToStartPage();
+              }) */
+      ),  
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[900],
@@ -47,7 +66,11 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
         tooltip: 'Add Requirement',
         child: Icon(Icons.add, color: Colors.white,),
       ),
-    ); 
+    ),
+    );  
+    
+    //print(requirementList); 
+
   }
 
   ListView getListView() {
@@ -130,8 +153,8 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                 ),
               ),
               onTap: (){
-                String title = this.requirementList[position].primarySkill + '  -  ' +  this.requirementList[position].experienceLevel;
-                goToHiringManagerSeeCandidates(title);
+                //String title = this.requirementList[position].primarySkill + '  -  ' +  this.requirementList[position].experienceLevel;
+                goToHiringManagerSeeCandidates(this.requirementList[position]);
               },
             ),
           );
@@ -144,13 +167,9 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
     }));
   }
 
-  void goToHiringManagerSeeCandidates(String title){
+  void goToHiringManagerSeeCandidates(Requirement requirement){
     Navigator.push(context, MaterialPageRoute(builder: (context){
-      return HiringManagerSeeCandidates(title);
+      return HiringManagerSeeCandidates(requirement);
     }));
-  }
-
-  void goToStartPage(){
-    Navigator.pop(context);
   }
 }

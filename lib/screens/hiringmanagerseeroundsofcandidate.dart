@@ -8,31 +8,32 @@ import 'package:interview_master/models/round.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class HiringManagerSeeRoundsOfCandidate extends StatefulWidget {
-  String candidateName;
-  HiringManagerSeeRoundsOfCandidate(this.candidateName);
+  Candidate candidate;
+  HiringManagerSeeRoundsOfCandidate(this.candidate);
 
   @override
   State<StatefulWidget> createState() {
-    return HiringManagerSeeRoundsOfCandidateState(this.candidateName);
+    return HiringManagerSeeRoundsOfCandidateState(this.candidate);
   }
 }
 
 class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRoundsOfCandidate> {
   //int count = 0;
-  String candidateName;
-  HiringManagerSeeRoundsOfCandidateState(this.candidateName);
+  Candidate candidate;
+  HiringManagerSeeRoundsOfCandidateState(this.candidate);
   List<Round> roundsList;
 
   @override
   Widget build(BuildContext context) {
     if (roundsList == null) {
-      roundsList = List<Round>();
+      //roundsList = List<Round>();
+      roundsList = candidate.roundsInfo;
 
-      roundsList.add(Round(1, 'Pass', 'Interviewer 1',
+      /* roundsList.add(Round(1, 'Pass', 'Interviewer 1',
           'Excellent reading and writing skills, moderate communication skills, moderate technical skills'));
       roundsList.add(Round(2, 'Pass', 'Interviewer 2',
           'Nice reading and writing skills, moderate communication skills'));
-      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills'));
+      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills')); */
       // updateListView();
     }
 
@@ -43,7 +44,7 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
             onPressed: () {
               goToHiringManagerSeeCandidates();
             }),
-        title: Text(this.candidateName),
+        title: Text(this.candidate.name),
       ),
       body: getListView(),
       /*floatingActionButton: FloatingActionButton(
@@ -67,9 +68,9 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
             child: ListTile(
               title: Text(
                 '\n' +
-                    this.roundsList[position].round_number.toString() +
+                    this.roundsList[position].roundNumber.toString() +
                     '    ' +
-                    this.roundsList[position].interviewer_name,
+                    this.roundsList[position].interviewerName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Colors.blue[900]),
               ),
 
@@ -97,7 +98,7 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
               ),
 
               trailing: SizedBox(
-                width: 40,
+                width: 80,
                 child: Text('\n'+this.roundsList[position].status,
                     style:
                     TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),

@@ -1,7 +1,7 @@
 import 'package:interview_master/models/round.dart';
 
 class Candidate {
-  int id;
+  String id;
   String name;
   String primarySkill;
   List<dynamic> secondarySkills;

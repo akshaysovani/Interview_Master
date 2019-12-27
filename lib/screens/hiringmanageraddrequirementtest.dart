@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:interview_master/models/candidate.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/user.dart';
@@ -24,6 +25,7 @@ class HiringManagerAddRequirementTest extends StatefulWidget {
 
 class HiringManagerAddRequirementTestState
     extends State<HiringManagerAddRequirementTest> {
+    
 
   var _experience = ['Fresher', 'Developer', 'Lead', 'Architect'];
   var _currentvalueselected = '';
@@ -66,6 +68,7 @@ class HiringManagerAddRequirementTestState
 
   @override
   Widget build(BuildContext context) {
+    //var candidateList = Provider.of<List<Candidate>>(context) ?? [];
     //TextEditingController projectController = TextEditingController();
     //TextEditingController customerController = TextEditingController();
     //AutoCompleteTextField
