@@ -64,7 +64,7 @@ class InterviewApp extends StatelessWidget {
           //home: RecruiterSeeCandidatesAndRequirements()
           //home: InterviewerEnterFeedback(),
           //home: InterviewerSeeRoundsOfCandidate()
-          //home: InterviewerSeeCandidates()
+          home: InterviewerSeeCandidates()
           //home: InterviewerFirstPage()
           //home: HiringManagerSeeRoundsOfCandidate()
           //home: HiringManagerSeeCandidates()
@@ -73,7 +73,7 @@ class InterviewApp extends StatelessWidget {
           //home: HiringManagerSeeRequirements()
           //home: HiringManagerHomePage()
           //home: LoginPage()
-          home: Wrapper()
+          //home: Wrapper()
           //home: SignIn()
           //home: NewUserRegister()
           ),

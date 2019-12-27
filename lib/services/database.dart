@@ -198,8 +198,28 @@ class DatabaseService {
   }
 
   Future addNewRound(Round round, Candidate candidate) async{
+    List<Map<String, dynamic>> listOfRounds = candidate.roundsInfo
+            .map((round) => {
+              'roundNumber': round.roundNumber,
+              'status': round.status,
+              'interviewerName': round.interviewerName, 
+              'feedback': round.feedback 
+            })
+            .toList();   
+
+    /* final docref = await candidateCollection.add({
+        //'id': requirement.id,
+        'name': candidate.name,
+        'primarySkill': candidate.primarySkill,
+        'secondarySkills': candidate.secondarySkills,
+        'softSkills': candidate.softSkills,
+        'experienceLevel': candidate.experienceLevel,
+        'projectName': candidate.projectName,
+        'roundsInfo': FieldValue.arrayUnion(listOfRounds)
+      }); */
+
     final _docRef = await candidateCollection.document(candidate.id).setData({
-        'roundsInfo': FieldValue.arrayUnion([round])
+        'roundsInfo': FieldValue.arrayUnion(listOfRounds)
     }, merge: true);
   }
 }
