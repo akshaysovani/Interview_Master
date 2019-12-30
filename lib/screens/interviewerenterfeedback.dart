@@ -45,7 +45,9 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
     if (this.candidate.roundsInfo.isEmpty){
       roundNumberController.text = '1'; 
     }else{
-      roundNumberController.text = this.candidate.roundsInfo.last.roundNumber;   
+      int currentRound = int.parse(candidate.roundsInfo.last.roundNumber);
+      currentRound += 1;
+      roundNumberController.text = currentRound.toString();   
     }
   }
 
@@ -223,9 +225,9 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
                       textScaleFactor: 1.5,
                     ),
                     onPressed: () async {
-                      print(roundNumberController.text);
+                      /* print(roundNumberController.text);
                       print(interviewerTextField.textField.controller.text);
-                      print(feedbackController.text);
+                      print(feedbackController.text); */
                       if (_radioCurrentValue == 1){
                         status = 'Pass';  
                       }else{
@@ -233,6 +235,8 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
                       }
                       var result = await DatabaseService()
                         .addNewRound(Round(roundNumber: roundNumberController.text, interviewerName: interviewerTextField.textField.controller.text, feedback: feedbackController.text, status: status),candidate); // Update it
+                      print('done');  
+                      _save();
                     }),
               ))
         ],
@@ -245,7 +249,8 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
     });
   }*/
   void _save(){
-    goToInterviewerSeeRoundsOfCandidate();
+    Navigator.pop(context);
+    Navigator.pop(context);
     _showAlertDialogue('Success', 'Feedback Added');
   }
 

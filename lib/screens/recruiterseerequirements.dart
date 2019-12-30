@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/All_screens/NoteDetail.dart';
@@ -19,22 +20,12 @@ class RecruiterSeeRequirementsState extends State<RecruiterSeeRequirements> {
 
   @override
   Widget build(BuildContext context) {
+    requirementList = Provider.of<List<Requirement>>(context) ?? [];
     if (requirementList == null) {
       requirementList = List<Requirement>();
-      /* requirementList.add(Requirement(1, 'Java', ['Confidence','Communication'],'Developer','Project alpha',''));
-      requirementList.add(Requirement(2, 'Sales Representative',['Confidence','Communication'], 'Fresher','Project beta',''));
-      requirementList.add(Requirement(3, 'C++',['Confidence','Communication'], 'Developer','Project gamma',''));
-      requirementList.add(Requirement(3, 'Java', ['Confidence','Communication'],'Architect','Project gamma','')); */
-      /*requirementList[0].id = 1;
-      requirementList[0].title = 'Java';
-      requirementList[0].no_of_vacancies = 2;
-      //requirementList[0].date_updated = ;
-      requirementList[1].id = 2;
-      requirementList[1].title = 'Sales Representative';
-      requirementList[1].no_of_vacancies = 4;
-*/
-      // updateListView();
     }
+
+
     return Scaffold(
 
       /*appBar: AppBar(title: Text('Requirements'),

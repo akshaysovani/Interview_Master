@@ -7,6 +7,7 @@ import 'package:interview_master/models/round.dart';
 //import 'package:first_flutter_app/All_screens/NoteDetail.dart';
 //import 'package:sqflite/sqflite.dart';
 
+
 class HiringManagerSeeRoundsOfCandidate extends StatefulWidget {
   Candidate candidate;
   HiringManagerSeeRoundsOfCandidate(this.candidate);
@@ -22,19 +23,21 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
   Candidate candidate;
   HiringManagerSeeRoundsOfCandidateState(this.candidate);
   List<Round> roundsList;
+  List<Round> roundsUpdatedList;
 
   @override
   Widget build(BuildContext context) {
-    if (roundsList == null) {
-      //roundsList = List<Round>();
-      roundsList = candidate.roundsInfo;
+    if (roundsUpdatedList == null){
+      roundsUpdatedList = List();
+    }
 
-      /* roundsList.add(Round(1, 'Pass', 'Interviewer 1',
-          'Excellent reading and writing skills, moderate communication skills, moderate technical skills'));
-      roundsList.add(Round(2, 'Pass', 'Interviewer 2',
-          'Nice reading and writing skills, moderate communication skills'));
-      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills')); */
-      // updateListView();
+    if (roundsList == null) {
+    roundsList = this.candidate.roundsInfo;
+      for (Round round in roundsList){
+          if (round.roundNumber != '0'){
+            roundsUpdatedList.add(round);
+          }
+      }
     }
 
     return Scaffold(
@@ -60,7 +63,7 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: this.roundsList.length,
+        itemCount: this.roundsUpdatedList.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
@@ -68,9 +71,9 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
             child: ListTile(
               title: Text(
                 '\n' +
-                    this.roundsList[position].roundNumber.toString() +
+                    this.roundsUpdatedList[position].roundNumber.toString() +
                     '    ' +
-                    this.roundsList[position].interviewerName,
+                    this.roundsUpdatedList[position].interviewerName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Colors.blue[900]),
               ),
 
@@ -78,7 +81,7 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '\n' + this.roundsList[position].feedback + '\n',
+                    '\n' + this.roundsUpdatedList[position].feedback + '\n',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     //maxLines: fullFeedbackOn ? 10 : 1,
                     textAlign: TextAlign.start,
@@ -98,8 +101,8 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
               ),
 
               trailing: SizedBox(
-                width: 80,
-                child: Text('\n'+this.roundsList[position].status,
+                width: 60,
+                child: Text('\n'+this.roundsUpdatedList[position].status,
                     style:
                     TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
               ),

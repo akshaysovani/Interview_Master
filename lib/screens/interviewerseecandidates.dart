@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:interview_master/models/round.dart';
 import 'package:interview_master/screens/interviewerseeroundsofcandidate.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
@@ -22,26 +23,49 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
   //int count = 0;
   List<Candidate> candidateList;
 
+  Icon searchIcon = Icon(Icons.search);
+  Widget searchBar = Text('Candidates');
+  bool _isSearching;
+  String _searchText = "";
+  List<Candidate> searchList;
+
+  TextEditingController _controller = TextEditingController();
+
+  InterviewerSeeCandidatesState(){
+    _controller.addListener(() {
+      if (_controller.text.isEmpty) {
+        setState(() {
+          _isSearching = false;
+          _searchText = "";
+        });
+      } else {
+        setState(() {
+          _isSearching = true;
+          _searchText = _controller.text;
+        });
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     candidateList = Provider.of<List<Candidate>>(context) ?? [];
+
     if (candidateList == null) {
       candidateList = List<Candidate>();
-
-      /* candidateList.add(Candidate(1, 'Akshay Sovani', 'Developer', 'Java'));
-      candidateList.add(Candidate(1, 'Sanket Karandikar', 'Fresher', 'C++'));
-      candidateList.add(Candidate(1, 'Nachiket Gundi', 'Architect', 'Java')); */
-
-      /*requirementList[0].id = 1;
-      requirementList[0].title = 'Java';
-      requirementList[0].no_of_vacancies = 2;
-      //requirementList[0].date_updated = ;
-      requirementList[1].id = 2;
-      requirementList[1].title = 'Sales Representative';
-      requirementList[1].no_of_vacancies = 4;
-*/
-      // updateListView();
     }
+    if (searchList == null){
+      searchList = List();
+      if (_isSearching){        //search is going on
+        for (Candidate candidate in candidateList){
+          if (candidate.name.contains(_searchText)){
+
+          }    
+        }
+      }   
+    }
+
     return Scaffold(
       appBar: AppBar(
         /* leading: IconButton(
@@ -50,8 +74,27 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
               // goToPreviousPage();
               goToStartPage();
             }), */
-        title: Text('Candidates'),
+        title: this.searchBar,
         actions: <Widget>[
+          IconButton(  
+              icon: this.searchIcon,
+              onPressed: () {
+                setState(() {
+                  if (this.searchIcon.icon == Icons.search) {
+                    this.searchIcon = Icon(Icons.close);
+                    this.searchBar = TextField(
+                      controller: _controller,
+                      textInputAction: TextInputAction.go,
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    );
+                  } else {
+                    this.searchIcon = Icon(Icons.search);
+                    this.searchBar = Text('Candidates');
+                  }
+                });
+              }
+            ),
+
             FlatButton.icon(
               icon: Icon(Icons.person, color: Colors.white,),
               label: Text('Logout', style: TextStyle(color: Colors.white,
@@ -65,6 +108,7 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
           ],
       ),
       body: getListView(),
+      
       /*floatingActionButton: FloatingActionButton(
         onPressed: () {},
         tooltip: 'Add Requirement',
@@ -102,15 +146,10 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
               
               
               trailing: SizedBox(
-                width: 130,
+                width: 150,
                 child: Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: Text(
-                    'Cleared Round 2',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,
-                      //    color: Colors.blue[900]
-                    )
-                ),
+                  child: getText(this.candidateList[position])
                 )
                 ,
               ),
@@ -160,6 +199,25 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
           );
         });
   }
+
+
+  Text getText(Candidate candidate){
+    int passCounter = 0;
+    if (candidate.roundsInfo.last.roundNumber == '0'){
+      return Text('');
+    }else{
+      for (Round round in candidate.roundsInfo){
+        if (round.status == 'Pass'){
+          passCounter += 1;   
+        }  
+      }
+      return Text('Cleared Rounds:  ' + passCounter.toString() + '/' + candidate.roundsInfo.last.roundNumber,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,
+                      )
+              );  
+    }
+  }
+
   void goToStartPage(){
     Navigator.pop(context);
   }
@@ -170,3 +228,39 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
     }));
   }
 }
+
+/* class CandidateSearch extends SearchDelegate{
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(icon: Icon(Icons.clear), onPressed: (){})
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow,
+          progress: transitionAnimation,
+        ),
+        onPressed: (){
+
+        },
+    );
+  }
+
+  
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    throw UnimplementedError();
+  }
+  
+} */

@@ -61,7 +61,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[900],
         onPressed: () {
-          goToHiringManagerAddRequirementTest(Requirement(), 'Add Requirement');
+          goToHiringManagerAddRequirementTest(Requirement(), 'Add New Requirement');
         },
         tooltip: 'Add Requirement',
         child: Icon(Icons.add, color: Colors.white,),

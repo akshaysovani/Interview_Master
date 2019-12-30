@@ -9,32 +9,36 @@ import 'package:interview_master/models/round.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class RecruiterSeeRoundsOfCandidate extends StatefulWidget {
-  String candidateName;
-  RecruiterSeeRoundsOfCandidate(this.candidateName);
+  Candidate candidate;
+  RecruiterSeeRoundsOfCandidate(this.candidate);
 
   @override
   State<StatefulWidget> createState() {
-    return RecruiterSeeRoundsOfCandidateState(this.candidateName);
+    return RecruiterSeeRoundsOfCandidateState(this.candidate);
   }
 }
 
 class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandidate> {
-  String candidateName;
-  RecruiterSeeRoundsOfCandidateState(this.candidateName);
+  Candidate candidate;
+  RecruiterSeeRoundsOfCandidateState(this.candidate);
 
   //int count = 0;
   List<Round> roundsList;
+  List<Round> roundsUpdatedList;
 
   @override
   Widget build(BuildContext context) {
-    if (roundsList == null) {
-      roundsList = List<Round>();
+    if (roundsUpdatedList == null){
+      roundsUpdatedList = List();
+    }
 
-     /*  roundsList.add(Round(1, 'Pass', 'Interviewer 1',
-          'Excellent reading and writing skills, moderate communication skills, moderate technical skills'));
-      roundsList.add(Round(2, 'Pass', 'Interviewer 2',
-          'Nice reading and writing skills, moderate communication skills'));
-      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills')); */
+    if (roundsList == null) {
+      roundsList = this.candidate.roundsInfo;
+      for (Round round in roundsList){
+          if (round.roundNumber != '0'){
+            roundsUpdatedList.add(round);
+          }
+      }
     }
 
     return Scaffold(
@@ -44,7 +48,7 @@ class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandi
             onPressed: () {
               goToRecruiterSeeCandidates();
             }),
-        title: Text(candidateName),
+        title: Text(candidate.name),
       ),
       body: getListView(),
       /*floatingActionButton: FloatingActionButton(
@@ -60,7 +64,7 @@ class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandi
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: this.roundsList.length,
+        itemCount: this.roundsUpdatedList.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
@@ -68,9 +72,9 @@ class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandi
             child: ListTile(
               title: Text(
                 '\n' +
-                    this.roundsList[position].roundNumber.toString() +
+                    this.roundsUpdatedList[position].roundNumber.toString() +
                     '    ' +
-                    this.roundsList[position].interviewerName,
+                    this.roundsUpdatedList[position].interviewerName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Colors.blue[900]),
               ),
 
@@ -78,7 +82,7 @@ class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandi
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '\n' + this.roundsList[position].feedback + '\n',
+                    '\n' + this.roundsUpdatedList[position].feedback + '\n',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     //maxLines: fullFeedbackOn ? 10 : 1,
                     textAlign: TextAlign.start,
@@ -99,7 +103,7 @@ class RecruiterSeeRoundsOfCandidateState extends State<RecruiterSeeRoundsOfCandi
 
               trailing: SizedBox(
                 width: 40,
-                child: Text('\n'+this.roundsList[position].status,
+                child: Text('\n'+this.roundsUpdatedList[position].status,
                     style:
                     TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
               ),

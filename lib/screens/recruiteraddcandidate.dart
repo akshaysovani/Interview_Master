@@ -11,21 +11,38 @@ import 'package:interview_master/services/database.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class RecruiterAddCandidate extends StatefulWidget {
+  Candidate candidate;
+  String addOrEdit;
+  RecruiterAddCandidate(this.candidate, this.addOrEdit);
+
   @override
   State<StatefulWidget> createState() {
-    return RecruiterAddCandidateState();
+    return RecruiterAddCandidateState(this.candidate, this.addOrEdit);
   }
 }
 
 class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
+  Candidate candidate;
+  String addOrEdit;
+  RecruiterAddCandidateState(this.candidate, this.addOrEdit);
+
+  bool firstTimeLoad = true;
   var _experience = ['Fresher', 'Developer', 'Lead', 'Architect'];
   var _currentvalueselected = '';
 
   TextEditingController nameController = TextEditingController();
 
   initState() {
+    firstTimeLoad = true;
     super.initState();
-    _currentvalueselected = _experience[0];
+    if (candidate.primarySkill != null){                      //edit requirement  
+        nameController.text = candidate.name;
+        _currentvalueselected = candidate.experienceLevel;
+        WidgetsBinding.instance.addPostFrameCallback((_) =>
+        key.currentState.textField.controller.text = candidate.projectName);
+    }else{                                                      //add new requirement  
+        _currentvalueselected = _experience[0];
+    }
   }
 
   List<String> primarySkills;
@@ -101,6 +118,70 @@ class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
         longpressAttention.add(false);
       }
     }  
+
+    //Initial skills colour load
+    if (firstTimeLoad){
+      if (candidate.primarySkill != null){                      //edit requirement  
+        String reqPrimarySkill = candidate.primarySkill;
+        List<dynamic> reqSecondarySkills = candidate.secondarySkills;
+        List<dynamic> reqSoftSkills = candidate.softSkills;
+        
+        //Setting up primary skill 
+        int counter=-1;
+        int pos=0;
+        for (String skill in allSkills){
+          counter++;
+          if (skill == reqPrimarySkill){
+            pos = counter;  
+            break;
+          }
+        }
+        //counter=-1;
+        for (int i=0;i<longpressAttention.length;i++){
+          if (i==pos){
+            longpressAttention[i] = !longpressAttention[i];
+          }
+        }
+
+        //Setting up secondary skills
+        for (String secSkill in reqSecondarySkills){
+          counter=-1;
+          pos=0;
+          for (String skill in allSkills){
+            counter++;
+            if (skill == secSkill){
+              pos = counter;  
+              break;
+            }
+          }  
+          for (int i=0;i<pressAttention.length;i++){
+            if (i==pos){
+              pressAttention[i] = !pressAttention[i];
+            }
+          }
+        }
+
+        //Setting up soft skills
+        for (String softSkill in reqSoftSkills){
+          counter=-1;
+          pos=0;
+          for (String skill in allSkills){
+            counter++;
+            if (skill == softSkill){
+              pos = counter;  
+              break;
+            }
+          }  
+          for (int i=0;i<pressAttention.length;i++){
+            if (i==pos){
+              pressAttention[i] = !pressAttention[i];
+            }
+          }
+        }
+
+      } 
+      firstTimeLoad = false;
+    }
   
 
     TextStyle textStyle = Theme.of(context).textTheme.subtitle;
@@ -108,7 +189,7 @@ class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         //backgroundColor: Colors.grey[800],
-        title: Text('Add Candidate'),
+        title: Text(this.addOrEdit),
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
@@ -125,7 +206,11 @@ class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
               right: 20,
             ),
             child: TextField(
-              style: textStyle,
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Open Sans',
+                fontWeight: FontWeight.bold
+              ),
               controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Candidate Name',
@@ -297,15 +382,24 @@ class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
                       List<String> secondarySkillsNames = getSecondarySkills();
                       List<String> softSkillsNames = getSoftSkills();
 
-                      print(primarySkillName);
+                      /* print(primarySkillName);
                       print(secondarySkillsNames);
                       print(softSkillsNames);
                       print(_currentvalueselected);
-                      print(projectTextField.textField.controller.text);
+                      print(projectTextField.textField.controller.text); */
                       
-                      var result = await DatabaseService()
+                         if (candidate.primarySkill == null){      //adding new requirement 
+                        var result = await DatabaseService()
                         .addNewCandidate(Candidate(name: nameController.text,primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text, roundsInfo: [Round(roundNumber: '0', status: 'dummy round', feedback: 'dummy feedback', interviewerName: 'dummy name')])); // Update it
-                      _save();  
+                      }else{                                    //Editing current requirement
+                        var result = await DatabaseService()
+                        .editCurrentCandidate(Candidate(id: candidate.id,name: nameController.text,primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text, roundsInfo: [Round(roundNumber: '0', status: 'dummy round', feedback: 'dummy feedback', interviewerName: 'dummy name')])); // Update it
+                      }
+                      _save();                      
+
+                      /* var result = await DatabaseService()
+                        .addNewCandidate(Candidate(name: nameController.text,primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text, roundsInfo: [Round(roundNumber: '0', status: 'dummy round', feedback: 'dummy feedback', interviewerName: 'dummy name')])); // Update it
+                      _save();   */
                     }),
               ))
         ],
@@ -321,7 +415,7 @@ class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
 
   void _save(){
     Navigator.pop(context);
-    _showAlertDialogue('Success', 'Candidate Added');
+    _showAlertDialogue('Success', 'Candidate saved successfully');
   }
 
   void _showAlertDialogue(String title,String msg){

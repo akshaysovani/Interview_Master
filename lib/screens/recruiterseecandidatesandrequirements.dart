@@ -20,7 +20,7 @@ class RecruiterSeeCandidatesAndRequirementsState
     extends State<RecruiterSeeCandidatesAndRequirements> {
   final AuthService _authService = AuthService();
   int count = 0;
-  List<Requirement> requirementList;
+  //List<Requirement> requirementList;
 
   Icon searchIcon = Icon(Icons.search);
   Widget searchBar = Text('Interview Master');
@@ -96,7 +96,6 @@ class RecruiterSeeCandidatesAndRequirementsState
                       controller: _controller,
                       textInputAction: TextInputAction.go,
                       style: TextStyle(color: Colors.white, fontSize: 18),
-
                     );
                   } else {
                     this.searchIcon = Icon(Icons.search);

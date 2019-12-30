@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:interview_master/models/user.dart';
 import 'package:interview_master/screens/interviewerenterfeedback.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/round.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
@@ -25,26 +27,22 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
   InterviewerSeeRoundsOfCandidateState(this.candidate);
 
   List<Round> roundsList;
+  List<Round> roundsUpdatedList;
 
   @override
   Widget build(BuildContext context) {
+    if (roundsUpdatedList == null){
+      roundsUpdatedList = List();
+    }
+
     if (roundsList == null) {
-      //roundsList = List<Round>();
+      //roundsList = Provider.of<List<Round>>(context);
       roundsList = this.candidate.roundsInfo;
-      /* roundsList.add(Round(1, 'Pass', 'Interviewer 1',
-          'Excellent reading and writing skills, moderate communication skills, moderate technical skills'));
-      roundsList.add(Round(2, 'Pass', 'Interviewer 2',
-          'Nice reading and writing skills, moderate communication skills'));
-      roundsList.add(Round(3, 'Fail', 'Interviewer 3', 'Not good enough technical skills')); */
-      /*requirementList[0].id = 1;
-      requirementList[0].title = 'Java';
-      requirementList[0].no_of_vacancies = 2;
-      //requirementList[0].date_updated = ;
-      requirementList[1].id = 2;
-      requirementList[1].title = 'Sales Representative';
-      requirementList[1].no_of_vacancies = 4;
-*/
-      // updateListView();
+      for (Round round in roundsList){
+          if (round.roundNumber != '0'){
+            roundsUpdatedList.add(round);
+          }
+      }
     }
 
     return Scaffold(
@@ -62,11 +60,11 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
         backgroundColor: Colors.blue[900],
         onPressed: () {
           print(this.candidate.roundsInfo);
-          if (this.candidate.roundsInfo.isEmpty){     //yet to be interviewed even once
+          //if (this.candidate.roundsInfo.length == 1){     //yet to be interviewed even once
             goToInterviewerEnterFeedback(this.candidate);
-          }/* else{
-            goToInterviewerEnterFeedback(this.candidate.name,this.candidate.roundsInfo.last.roundNumber+1);  
-          } */
+          //}/* else{
+            //goToInterviewerEnterFeedback(this.candidate.name,this.candidate.roundsInfo.last.roundNumber+1);  
+          //} */
           
         },
         tooltip: 'Add Next Round Feedback',
@@ -80,7 +78,7 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: this.roundsList.length,
+        itemCount: this.roundsUpdatedList.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
@@ -88,9 +86,9 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
             child: ListTile(
               title: Text(
                 '\n' +
-                    this.roundsList[position].roundNumber.toString() +
+                    this.roundsUpdatedList[position].roundNumber.toString() +
                     '    ' +
-                    this.roundsList[position].interviewerName,
+                    this.roundsUpdatedList[position].interviewerName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19, color: Colors.blue[900]),
               ),
 
@@ -98,7 +96,7 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '\n' + this.roundsList[position].feedback + '\n',
+                    '\n' + this.roundsUpdatedList[position].feedback + '\n',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     //maxLines: fullFeedbackOn ? 10 : 1,
                     textAlign: TextAlign.start,
@@ -119,7 +117,7 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
 
               trailing: SizedBox(
                 width: 40,
-                child: Text('\n'+this.roundsList[position].status,
+                child: Text('\n'+this.roundsUpdatedList[position].status,
                     style:
                     TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
               ),

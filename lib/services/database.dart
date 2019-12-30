@@ -106,48 +106,7 @@ class DatabaseService {
   }
 
 
-  //Add new Candidate
-  Future addNewCandidate(Candidate candidate) async{
-      /* List<List<String>> mainRoundInfoList = List();
-      List<String> roundInfoList = List();
-      for (Round round in candidate.roundsInfo){
-        String roundNumber = round.roundNumber;
-        String staus = round.status;
-        String interviewName = round.interviewerName;
-        String feedback = round.feedback;
-        roundInfoList.add(roundNumber);
-        roundInfoList.add(staus);
-        roundInfoList.add(interviewName);
-        roundInfoList.add(feedback);
-      }
-      mainRoundInfoList.add(roundInfoList); */
-
-      List<Map<String, dynamic>> listOfRounds = candidate.roundsInfo
-            .map((round) => {
-              'roundNumber': round.roundNumber,
-              'status': round.status,
-              'interviewerName': round.interviewerName, 
-              'feedback': round.feedback 
-            })
-            .toList(); 
-      
-      final docref = await candidateCollection.add({
-        //'id': requirement.id,
-        'name': candidate.name,
-        'primarySkill': candidate.primarySkill,
-        'secondarySkills': candidate.secondarySkills,
-        'softSkills': candidate.softSkills,
-        'experienceLevel': candidate.experienceLevel,
-        'projectName': candidate.projectName,
-        'roundsInfo': FieldValue.arrayUnion(listOfRounds)
-      });
-
-      String docId = docref.documentID;
-      print('new Id is: '+ docId);
-      final _docRef = await candidateCollection.document(docId).setData({
-        'id': docId,    
-      }, merge: true);
-    }
+  
 
     /* List<Round> getRoundInfo(List<Map<String, dynamic>> listOfRoundMapObjects){
       List<Round> roundList = List();
@@ -197,17 +156,35 @@ class DatabaseService {
       .map(getCandidateList);
   }
 
-  Future addNewRound(Round round, Candidate candidate) async{
-    List<Map<String, dynamic>> listOfRounds = candidate.roundsInfo
+  Future addNewRound(Round incomingRound, Candidate candidate) async{
+    List<Map<String, dynamic>> listOfRounds = List();
+    Map<String, dynamic> map = Map();
+    map['roundNumber'] = incomingRound.roundNumber;
+    map['status'] = incomingRound.status;
+    map['interviewerName'] = incomingRound.interviewerName; 
+    map['feedback']= incomingRound.feedback;
+
+    listOfRounds.add(map);
+
+    final _docRef = await candidateCollection.document(candidate.id).setData({
+        'roundsInfo': FieldValue.arrayUnion(listOfRounds)
+    }, merge: true);
+  }
+
+
+
+  //Add new Candidate
+  Future addNewCandidate(Candidate candidate) async{
+      List<Map<String, dynamic>> listOfRounds = candidate.roundsInfo
             .map((round) => {
               'roundNumber': round.roundNumber,
               'status': round.status,
               'interviewerName': round.interviewerName, 
               'feedback': round.feedback 
             })
-            .toList();   
-
-    /* final docref = await candidateCollection.add({
+            .toList(); 
+      
+      final docref = await candidateCollection.add({
         //'id': requirement.id,
         'name': candidate.name,
         'primarySkill': candidate.primarySkill,
@@ -216,10 +193,32 @@ class DatabaseService {
         'experienceLevel': candidate.experienceLevel,
         'projectName': candidate.projectName,
         'roundsInfo': FieldValue.arrayUnion(listOfRounds)
-      }); */
+      });
 
-    final _docRef = await candidateCollection.document(candidate.id).setData({
-        'roundsInfo': FieldValue.arrayUnion(listOfRounds)
-    }, merge: true);
+      String docId = docref.documentID;
+      print('new Id is: '+ docId);
+      final _docRef = await candidateCollection.document(docId).setData({
+        'id': docId,    
+      }, merge: true);
+    }
+
+
+  //Edit current candidate
+  Future editCurrentCandidate(Candidate candidate) async{
+      final _docRef = await candidateCollection.document(candidate.id).setData({
+        'name': candidate.name,
+        'primarySkill': candidate.primarySkill,
+        'secondarySkills': candidate.secondarySkills,
+        'softSkills': candidate.softSkills,
+        'experienceLevel': candidate.experienceLevel,
+        'projectName': candidate.projectName,
+      }, merge: true);
   }
+
+  //delete current candidate
+  void deleteCurrentCandidate(Candidate candidate) async{
+    final result = await candidateCollection.document(candidate.id).delete();   
+  }
+
+
 }
