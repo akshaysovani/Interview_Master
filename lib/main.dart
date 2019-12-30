@@ -61,10 +61,10 @@ class InterviewApp extends StatelessWidget {
           //home: RecruiterAddCandidate(),
           //home: RecruiterSeeCandidatesByRequirement(),
           //home: RecruiterSeeRequirements()
-          //home: RecruiterSeeCandidatesAndRequirements()
+          home: RecruiterSeeCandidatesAndRequirements()
           //home: InterviewerEnterFeedback(),
           //home: InterviewerSeeRoundsOfCandidate()
-          home: InterviewerSeeCandidates()
+          //home: InterviewerSeeCandidates()
           //home: InterviewerFirstPage()
           //home: HiringManagerSeeRoundsOfCandidate()
           //home: HiringManagerSeeCandidates()

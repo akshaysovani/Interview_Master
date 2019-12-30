@@ -22,6 +22,8 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
   final AuthService _authService = AuthService();
   //int count = 0;
   List<Candidate> candidateList;
+  List<Candidate> candidateListToBeDisplayed;
+  bool dummy = false;
 
   Icon searchIcon = Icon(Icons.search);
   Widget searchBar = Text('Candidates');
@@ -29,41 +31,17 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
   String _searchText = "";
   List<Candidate> searchList;
 
-  TextEditingController _controller = TextEditingController();
-
-  InterviewerSeeCandidatesState(){
-    _controller.addListener(() {
-      if (_controller.text.isEmpty) {
-        setState(() {
-          _isSearching = false;
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _isSearching = true;
-          _searchText = _controller.text;
-        });
-      }
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
-    candidateList = Provider.of<List<Candidate>>(context) ?? [];
+    if (!dummy){
+      candidateList = Provider.of<List<Candidate>>(context) ?? [];
+      candidateListToBeDisplayed = List();
+      candidateListToBeDisplayed.addAll(candidateList);
+    }
+    
 
     if (candidateList == null) {
       candidateList = List<Candidate>();
-    }
-    if (searchList == null){
-      searchList = List();
-      if (_isSearching){        //search is going on
-        for (Candidate candidate in candidateList){
-          if (candidate.name.contains(_searchText)){
-
-          }    
-        }
-      }   
     }
 
     return Scaffold(
@@ -83,13 +61,19 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
                   if (this.searchIcon.icon == Icons.search) {
                     this.searchIcon = Icon(Icons.close);
                     this.searchBar = TextField(
-                      controller: _controller,
+                      autofocus: true,
+                      onChanged: (value){
+                        filterSearchResults(value);    
+                      },
                       textInputAction: TextInputAction.go,
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     );
                   } else {
                     this.searchIcon = Icon(Icons.search);
                     this.searchBar = Text('Candidates');
+                    setState(() {
+                      dummy = false;
+                    });
                   }
                 });
               }
@@ -117,11 +101,36 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
     );
   }
 
+  void filterSearchResults(String query){
+    List<Candidate> dummyCandidateList = List();
+    dummyCandidateList.addAll(candidateList);
+    if (query.isNotEmpty){
+      List<Candidate> dummyListData = List();
+      dummyCandidateList.forEach((candidate){
+      if (candidate.name.toLowerCase().contains(query.toLowerCase())){
+          dummyListData.add(candidate);
+      }
+      });
+      setState(() {
+        candidateListToBeDisplayed.clear();
+        candidateListToBeDisplayed.addAll(dummyListData);
+        dummy = true;
+      });
+      return;
+    } else{
+      setState(() {
+        candidateListToBeDisplayed.clear();
+        candidateListToBeDisplayed.addAll(candidateList);
+        dummy = false;
+      });
+    } 
+  }
+
   ListView getListView() {
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: this.candidateList.length,
+        itemCount: this.candidateListToBeDisplayed.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
@@ -130,14 +139,14 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
               title: Padding(
                 padding: EdgeInsets.only(top: 10),
                 child: Text(
-                this.candidateList[position].name,
+                this.candidateListToBeDisplayed[position].name,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue[900]),
               ),
               ),
               subtitle: Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 5),
                 child: Text(
-                this.candidateList[position].experienceLevel,
+                this.candidateListToBeDisplayed[position].experienceLevel,
                 style: TextStyle(
                     fontSize: 16, fontWeight: FontWeight.w500
                 ),
@@ -149,12 +158,15 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
                 width: 150,
                 child: Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: getText(this.candidateList[position])
+                  child: getText(this.candidateListToBeDisplayed[position])
                 )
                 ,
               ),
               onTap: (){
-                goToInterviewerSeeRoundsOfCandidate(this.candidateList[position]);
+                dummy = false;
+                this.searchIcon = Icon(Icons.search);
+                this.searchBar = Text('Candidates');
+                goToInterviewerSeeRoundsOfCandidate(this.candidateListToBeDisplayed[position]);
               },
               /*trailing: SizedBox(
                 width: 80.0,

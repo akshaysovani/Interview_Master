@@ -25,31 +25,7 @@ class RecruiterSeeCandidatesAndRequirementsState
   Icon searchIcon = Icon(Icons.search);
   Widget searchBar = Text('Interview Master');
 
-  TextEditingController _controller = TextEditingController();
   bool _isSearching;
-  String _searchText = "";
-  List searchResult = List();
-
-  RecruiterSeeCandidatesAndRequirementsState(){
-    _controller.addListener(() {
-      if (_controller.text.isEmpty) {
-        setState(() {
-          _isSearching = false;
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _isSearching = true;
-          _searchText = _controller.text;
-        });
-      }
-    });
-  }
-
-  void initState(){
-    super.initState();
-    _isSearching = false;
-  }
 
 
   @override
@@ -89,11 +65,19 @@ class RecruiterSeeCandidatesAndRequirementsState
             IconButton(
               icon: this.searchIcon,
               onPressed: () {
+                
+                    int index = DefaultTabController.of(context).index;
+                    print(index);
+                
+                
                 setState(() {
                   if (this.searchIcon.icon == Icons.search) {
                     this.searchIcon = Icon(Icons.close);
                     this.searchBar = TextField(
-                      controller: _controller,
+                      autofocus: true,
+                      onChanged: (value){
+                        //filterSearchResults(value);    
+                      },
                       textInputAction: TextInputAction.go,
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     );
