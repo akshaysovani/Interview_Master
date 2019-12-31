@@ -38,9 +38,9 @@ class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> 
        print(candidate.experienceLevel); 
     }); */
 
-    /* if (candidateList == null) {
+     if (candidateList == null) {
       candidateList = List<Candidate>();
-    } */
+    } 
 
     if (candidateListForThisRequirement == null){
       candidateListForThisRequirement = List<Candidate>();

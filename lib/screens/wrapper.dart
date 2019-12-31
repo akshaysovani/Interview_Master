@@ -27,12 +27,11 @@ class _WrapperState extends State<Wrapper> {
     }); 
   }
  */
+
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
-    
     //print('user is:' + user.toString());
-    
 
     return FutureBuilder<String>(
       future: getRole(user),
@@ -69,7 +68,6 @@ class _WrapperState extends State<Wrapper> {
               ); */
               //(child: new Text('${snapshot.data}'));  
            }
-        
             return StartPage();
       },
      );

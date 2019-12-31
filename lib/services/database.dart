@@ -4,6 +4,7 @@ import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/round.dart';
 import 'package:interview_master/models/user.dart';
+import 'package:interview_master/models/userwithname.dart';
 
 
 class DatabaseService {
@@ -41,6 +42,9 @@ class DatabaseService {
     }
       return name;
   }  
+
+
+
 
 
   //Add new requirement
@@ -205,7 +209,7 @@ class DatabaseService {
 
   //Edit current candidate
   Future editCurrentCandidate(Candidate candidate) async{
-      final _docRef = await candidateCollection.document(candidate.id).setData({
+      final _docRef = await  candidateCollection.document(candidate.id).setData({
         'name': candidate.name,
         'primarySkill': candidate.primarySkill,
         'secondarySkills': candidate.secondarySkills,
@@ -219,6 +223,4 @@ class DatabaseService {
   void deleteCurrentCandidate(Candidate candidate) async{
     final result = await candidateCollection.document(candidate.id).delete();   
   }
-
-
 }

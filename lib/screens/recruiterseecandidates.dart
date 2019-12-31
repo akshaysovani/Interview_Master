@@ -6,29 +6,49 @@ import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:interview_master/screens/recruiterseecandidatesandrequirements.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class RecruiterSeeCandidatesByRequirement extends StatefulWidget {
+  List<Candidate> candidateListToBeDisplayed;
+  RecruiterSeeCandidatesByRequirement({this.candidateListToBeDisplayed});
+
   @override
-  State<StatefulWidget> createState() {
-    return RecruiterSeeCandidatesByRequirementState();
-  }
+  RecruiterSeeCandidatesByRequirementState createState() => RecruiterSeeCandidatesByRequirementState();
+  
 }
 
 class RecruiterSeeCandidatesByRequirementState
     extends State<RecruiterSeeCandidatesByRequirement> {
+
+  
+
   //int count = 0;
-  List<Candidate> candidateList;
+  bool dummy;
 
   @override
   Widget build(BuildContext context) {
+      
+      
+
+    /* if (!dummy){
     candidateList = Provider.of<List<Candidate>>(context) ?? [];
-    if (candidateList == null) {
+    candidateListToBeDisplayed = List();
+    candidateListToBeDisplayed.addAll(candidateList);
+    } */
+
+    /* for (Candidate candidate in candidateListToBeDisplayed){
+      print(candidate.experienceLevel);
+    } */
+    //print(dummy);
+
+
+    /* if (candidateList == null) {
       candidateList = List<Candidate>();
-    }
+    } */
 
     return Scaffold(
         /*appBar: AppBar(
@@ -57,21 +77,50 @@ class RecruiterSeeCandidatesByRequirementState
         tooltip: 'Add Requirement',
         child: Icon(Icons.add),
       ),*/
-        );
+    );
   }
+
+  /* void filterSearchResults (String query){
+    List<Candidate> dummyCandidateList = List();
+    debugPrint(candidateList.length.toString());
+    for (Candidate candidate in candidateList){
+        print(candidate.experienceLevel);
+    }
+    //dummyCandidateList.addAll(candidateList);
+    //debugPrint(dummyCandidateList.length.toString());
+    if (query.isNotEmpty){
+      List<Candidate> dummyListData = List();
+      dummyCandidateList.forEach((candidate){
+      if (candidate.name.toLowerCase().contains(query.toLowerCase())){
+          dummyListData.add(candidate);
+      }
+      });
+      setState(() {
+        candidateListToBeDisplayed.clear();
+        candidateListToBeDisplayed.addAll(dummyListData);
+        dummy = true;
+      });
+    } else{
+      setState(() {
+        candidateListToBeDisplayed.clear();
+        candidateListToBeDisplayed.addAll(candidateList);
+        dummy = false;
+      });
+    } 
+  } */
 
   ListView getListView() {
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: this.candidateList.length,
+        itemCount: widget.candidateListToBeDisplayed.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
             elevation: 2.0,
             child: ListTile(
               title: Text(
-                this.candidateList[position].name,
+                widget.candidateListToBeDisplayed[position].name,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 21,
@@ -85,8 +134,8 @@ class RecruiterSeeCandidatesByRequirementState
                       //color: Colors.blue,
                       child: GestureDetector(
                         onTap: () {
-                          String title = 'Edit - ' + this.candidateList[position].name;
-                          goToRecruiterAddCandidate(this.candidateList[position],title);
+                          String title = 'Edit - ' + widget.candidateListToBeDisplayed[position].name;
+                          goToRecruiterAddCandidate(widget.candidateListToBeDisplayed[position],title);
                         },
                         child: Icon(Icons.edit
                             //color: Colors.blue
@@ -98,7 +147,7 @@ class RecruiterSeeCandidatesByRequirementState
                     ),
                     GestureDetector(
                       onTap: () async {
-                        var result = await DatabaseService().deleteCurrentCandidate(this.candidateList[position]);
+                        var result = await DatabaseService().deleteCurrentCandidate(widget.candidateListToBeDisplayed[position]);
                       },
                       child: Icon(Icons.delete
                           //color: Colors.red,
@@ -108,7 +157,7 @@ class RecruiterSeeCandidatesByRequirementState
                 ),
               ),
               onTap: (){
-                goToRecruiterSeeRoundsOfCandidate(this.candidateList[position]);
+                goToRecruiterSeeRoundsOfCandidate(widget.candidateListToBeDisplayed[position]);
               },
             ),
           );

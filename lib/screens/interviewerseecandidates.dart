@@ -27,9 +27,6 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
 
   Icon searchIcon = Icon(Icons.search);
   Widget searchBar = Text('Candidates');
-  bool _isSearching;
-  String _searchText = "";
-  List<Candidate> searchList;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +113,6 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
         candidateListToBeDisplayed.addAll(dummyListData);
         dummy = true;
       });
-      return;
     } else{
       setState(() {
         candidateListToBeDisplayed.clear();

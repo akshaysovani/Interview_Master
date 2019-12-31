@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:interview_master/models/candidate.dart';
+import 'package:interview_master/models/user.dart';
 import 'package:interview_master/screens/hiringmanageraddrequirementtest.dart';
 import 'package:interview_master/screens/hiringmanageraddrequirement.dart';
 import 'package:interview_master/screens/hiringmanagerseecandidates.dart';
-import 'dart:async';
+//import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/services/auth.dart';
 import 'package:interview_master/services/database.dart';
@@ -17,26 +19,60 @@ class HiringManagerSeeRequirements extends StatefulWidget {
 }
 
 class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequirements> {
+  var resultName;
   int count = 0;
-  List<Requirement> requirementList;
   final AuthService _authService = AuthService();
+  FirebaseAuth _auth;
   
+  List<Requirement> requirementList;
+  List<Requirement> requirementListForThisHiringManager;
+
+  @override
+  void initState() {
+    super.initState();
+    _auth = FirebaseAuth.instance;
+    _getCurrentUser().then((name){
+        setState(() {
+        resultName = name;  
+        print('name is 0......... '+resultName);
+        });
+    print('name is 1......... '+resultName);
+    });
+    
+  }
+
+  Future<String> _getCurrentUser() async{
+    FirebaseUser user = await _auth.currentUser();
+    //print('uid'+user.uid);
+    User usr = AuthService().getUserFromFirebaseUser(user);
+    return await DatabaseService().getName(usr);
+  }
+
   @override
   Widget build(BuildContext context) {
     requirementList = Provider.of<List<Requirement>>(context) ?? [];
 
     if (requirementList == null) {
       requirementList = List<Requirement>();
-      //print(requirementList); 
-      /* requirementList.add(Requirement(1, 'Java', ['Confidence','Communication'],'Developer','Project alpha',''));
-      requirementList.add(Requirement(2, 'Python', ['Confidence','Communication'], 'Fresher','Project beta',''));
-      requirementList.add(Requirement(3, 'C++', ['Confidence','Communication'], 'Developer','Project gamma',''));
-      requirementList.add(Requirement(4, 'Java', ['Confidence','Communication'], 'Architect','Project gamma','')); */
+    }
+    
+    if (requirementListForThisHiringManager == null){
+      requirementListForThisHiringManager = List();
+      for (Requirement requirement in requirementList){
+          print('owner\n');
+          print(requirement.owner);
+          print('resultName\n');
+          print(resultName);
+          if (requirement.owner == resultName){
+            print('in*********');
+            requirementListForThisHiringManager.add(requirement);
+          }
+      }
     }
 
-    return StreamProvider<List<Candidate>>.value(
-      value: DatabaseService().candidates,
-      child: Scaffold(
+
+
+    return Scaffold(
       appBar: AppBar(
           title: Text('Requirements'),
           actions: <Widget>[
@@ -66,8 +102,8 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
         tooltip: 'Add Requirement',
         child: Icon(Icons.add, color: Colors.white,),
       ),
-    ),
-    );  
+    );
+     
     
     //print(requirementList); 
 
@@ -77,7 +113,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
     TextStyle titleStyle = Theme.of(context).textTheme.title;
     TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
     return ListView.builder(
-        itemCount: requirementList.length,
+        itemCount: requirementListForThisHiringManager.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
             color: Colors.white,
@@ -93,8 +129,8 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                 padding: EdgeInsets.only(top: 5, bottom: 10),
                 child: Text(
                 //'\n'+
-                this.requirementList[position].primarySkill
-                    + '  -  ' + this.requirementList[position].experienceLevel
+                this.requirementListForThisHiringManager[position].primarySkill
+                    + '  -  ' + this.requirementListForThisHiringManager[position].experienceLevel
                 ,
                 style: TextStyle(
                     color: Colors.blue[900],
@@ -110,7 +146,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                 padding: EdgeInsets.only( bottom: 10),
                 child: Text(
                 //'\n' +
-                this.requirementList[position].projectName
+                this.requirementListForThisHiringManager[position].projectName
                 //  + '\n'
                 ,
                 style: TextStyle(
@@ -132,8 +168,8 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                       //color: Colors.blue,
                       child: GestureDetector(
                         onTap: () {
-                          String title = 'Edit - ' + this.requirementList[position].primarySkill + ' - ' + this.requirementList[position].experienceLevel;
-                          goToHiringManagerAddRequirementTest(this.requirementList[position],title);
+                          String title = 'Edit - ' + this.requirementListForThisHiringManager[position].primarySkill + ' - ' + this.requirementListForThisHiringManager[position].experienceLevel;
+                          goToHiringManagerAddRequirementTest(this.requirementListForThisHiringManager[position],title);
                         },
                         child: Icon(Icons.edit
                           //color: Colors.blue
@@ -143,7 +179,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                     Container(width: 25,),
                     GestureDetector(
                       onTap: () async {
-                          var result = await DatabaseService().deleteCurrentRequirement(this.requirementList[position]);
+                          var result = await DatabaseService().deleteCurrentRequirement(this.requirementListForThisHiringManager[position]);
                         },
                       child: Icon(Icons.delete
                         //color: Colors.red,
@@ -154,7 +190,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
               ),
               onTap: (){
                 //String title = this.requirementList[position].primarySkill + '  -  ' +  this.requirementList[position].experienceLevel;
-                goToHiringManagerSeeCandidates(this.requirementList[position]);
+                goToHiringManagerSeeCandidates(this.requirementListForThisHiringManager[position]);
               },
             ),
           );

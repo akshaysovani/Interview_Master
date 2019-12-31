@@ -162,7 +162,7 @@ class NewUserRegisterState extends State<NewUserRegister> {
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(top: 70),
+                  padding: EdgeInsets.only(top: 90),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(25.0),

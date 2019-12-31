@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:interview_master/models/user.dart';
+import 'package:interview_master/models/userwithname.dart';
 import 'package:interview_master/services/database.dart';
 
 
 class AuthService{
+String nameToBeSentBackAsStream = '';
   
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -23,6 +25,7 @@ Stream<User> get user{
       return null;
   });
 }
+
 
 //anon
 Future signInAnon() async{
