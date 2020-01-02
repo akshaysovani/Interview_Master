@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:interview_master/models/candidate.dart';
+import 'package:interview_master/models/primarySkill.dart';
+import 'package:interview_master/models/project.dart';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/round.dart';
+import 'package:interview_master/models/secondarySkill.dart';
+import 'package:interview_master/models/softSkill.dart';
 import 'package:interview_master/models/user.dart';
 import 'package:interview_master/models/userwithname.dart';
-
 
 class DatabaseService {
   final String uid;
@@ -14,7 +17,10 @@ class DatabaseService {
   final CollectionReference userCollection = Firestore.instance.collection('user');
   final CollectionReference requirementCollection = Firestore.instance.collection('requirement');
   final CollectionReference candidateCollection = Firestore.instance.collection('candidate');
-
+  final CollectionReference primarySkillsCollection = Firestore.instance.collection('primarySkills');
+  final CollectionReference secondarySkillsCollection = Firestore.instance.collection('secondarySkills');
+  final CollectionReference softSkillsCollection = Firestore.instance.collection('softSkills');
+  final CollectionReference projectCollection = Firestore.instance.collection('project');
   Future updateUserCollection(String fullName, String role) async{
       return await userCollection.document(uid).setData({
         'id': uid,
@@ -42,10 +48,6 @@ class DatabaseService {
     }
       return name;
   }  
-
-
-
-
 
   //Add new requirement
   Future addNewRequirement(Requirement requirement, User user) async{
@@ -109,9 +111,6 @@ class DatabaseService {
       .map(getRequirementList);
   }
 
-
-  
-
     /* List<Round> getRoundInfo(List<Map<String, dynamic>> listOfRoundMapObjects){
       List<Round> roundList = List();
       for (Map<String, dynamic> map in listOfRoundMapObjects){
@@ -160,6 +159,62 @@ class DatabaseService {
       .map(getCandidateList);
   }
 
+  List<PrimarySkill> getPrimarySkillsList(QuerySnapshot querySnapshot){  
+    return querySnapshot.documents.map((doc){
+      return PrimarySkill(
+        skillName: doc.data['skillName'] ?? '',
+      );
+    }).toList();
+  }
+
+  Stream<List<PrimarySkill>> get primarySkillStream{
+      return primarySkillsCollection.snapshots()
+      .map(getPrimarySkillsList);
+  }
+
+
+  List<SecondarySkill> getSecondarySkillsList(QuerySnapshot querySnapshot){  
+    return querySnapshot.documents.map((doc){
+      return SecondarySkill(
+        skillName: doc.data['skillName'] ?? '',
+      );
+    }).toList();
+  }
+
+  Stream<List<SecondarySkill>> get secondarySkillStream{
+      return secondarySkillsCollection.snapshots()
+      .map(getSecondarySkillsList);
+  }
+
+
+  List<SoftSkill> getSoftSkillsList(QuerySnapshot querySnapshot){  
+    return querySnapshot.documents.map((doc){
+      return SoftSkill(
+        skillName: doc.data['skillName'] ?? '',
+      );
+    }).toList();
+  }
+
+  Stream<List<SoftSkill>> get softSkillStream{
+      return softSkillsCollection.snapshots()
+      .map(getSoftSkillsList);
+  }
+
+  List<Project> getProjectsList(QuerySnapshot querySnapshot){  
+    return querySnapshot.documents.map((doc){
+      return Project(
+        name: doc.data['name'] ?? '',
+      );
+    }).toList();
+  }
+
+
+  Stream<List<Project>> get projectStream{
+      return projectCollection.snapshots()
+      .map(getProjectsList);
+  }
+
+ 
   Future addNewRound(Round incomingRound, Candidate candidate) async{
     List<Map<String, dynamic>> listOfRounds = List();
     Map<String, dynamic> map = Map();

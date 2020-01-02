@@ -89,6 +89,7 @@ class _WrapperState extends State<Wrapper> {
           }});
       print('userQuery:'+userQuery.toString());
       print('Role:'+role);
+      
       /* userQuery.getDocuments().then((data){ 
           if (data.documents.length > 0){
                     print('In getRole');

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:interview_master/models/primarySkill.dart';
+import 'package:interview_master/models/project.dart';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/round.dart';
+import 'package:interview_master/models/secondarySkill.dart';
+import 'package:interview_master/models/softSkill.dart';
 import 'package:interview_master/models/user.dart';
 import 'package:interview_master/screens/adminaddemployee.dart';
 import 'package:interview_master/screens/adminseeemployees.dart';
@@ -46,6 +50,14 @@ class InterviewApp extends StatelessWidget {
             value: DatabaseService().requirements),
         StreamProvider<List<Candidate>>.value(
             value: DatabaseService().candidates),
+        StreamProvider<List<PrimarySkill>>.value(
+            value: DatabaseService().primarySkillStream),
+        StreamProvider<List<SecondarySkill>>.value(
+            value: DatabaseService().secondarySkillStream),
+        StreamProvider<List<SoftSkill>>.value(
+            value: DatabaseService().softSkillStream),
+        StreamProvider<List<Project>>.value(
+            value: DatabaseService().projectStream),
       ],
       child: MaterialApp(
           theme: ThemeData(

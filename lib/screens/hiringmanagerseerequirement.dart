@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:interview_master/models/candidate.dart';
@@ -26,30 +27,21 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
   
   List<Requirement> requirementList;
   List<Requirement> requirementListForThisHiringManager;
+  User user;
 
   @override
-  void initState() {
-    super.initState();
-    _auth = FirebaseAuth.instance;
-    _getCurrentUser().then((name){
-        setState(() {
-        resultName = name;  
-        print('name is 0......... '+resultName);
-        });
-    print('name is 1......... '+resultName);
-    });
-    
-  }
-
+  
+/* 
   Future<String> _getCurrentUser() async{
     FirebaseUser user = await _auth.currentUser();
     //print('uid'+user.uid);
     User usr = AuthService().getUserFromFirebaseUser(user);
     return await DatabaseService().getName(usr);
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<User>(context);
     requirementList = Provider.of<List<Requirement>>(context) ?? [];
 
     if (requirementList == null) {
@@ -58,19 +50,13 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
     
     if (requirementListForThisHiringManager == null){
       requirementListForThisHiringManager = List();
-      for (Requirement requirement in requirementList){
-          print('owner\n');
-          print(requirement.owner);
-          print('resultName\n');
-          print(resultName);
+      /* for (Requirement requirement in requirementList){
           if (requirement.owner == resultName){
             print('in*********');
             requirementListForThisHiringManager.add(requirement);
           }
-      }
+      } */
     }
-
-
 
     return Scaffold(
       appBar: AppBar(
@@ -103,16 +89,24 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
         child: Icon(Icons.add, color: Colors.white,),
       ),
     );
-     
-    
     //print(requirementList); 
-
   }
 
-  ListView getListView() {
-    TextStyle titleStyle = Theme.of(context).textTheme.title;
-    TextStyle subTitleStyle = Theme.of(context).textTheme.subtitle;
-    return ListView.builder(
+  Widget getListView() {
+    return FutureBuilder<String>( 
+      future: getName(user),
+      builder: (BuildContext buildContext, AsyncSnapshot<String> snapshot){
+        if (snapshot.hasError){
+              return Center(child: Text('Error: ${snapshot.error}'));
+        }
+        //print(snapshot.data);
+        requirementListForThisHiringManager.clear();
+        for (Requirement requirement in requirementList){
+              if (requirement.owner == snapshot.data){
+                  requirementListForThisHiringManager.add(requirement);
+              }
+        }
+        return ListView.builder(
         itemCount: requirementListForThisHiringManager.length,
         itemBuilder: (BuildContext context, int position) {
           return Card(
@@ -195,6 +189,11 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
             ),
           );
         });
+      }
+
+    );
+    
+    
   }
 
   void goToHiringManagerAddRequirementTest(Requirement requirement, String addoredit){
@@ -208,4 +207,20 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
       return HiringManagerSeeCandidates(requirement);
     }));
   }
+
+  Future<String> getName(User user) async{
+    resultName = '';
+    if (user != null){
+      var userQuery = await Firestore.instance.collection('user').where('id', isEqualTo: user.id).getDocuments().then((data){ 
+          if (data.documents.length > 0){
+                    //print('In getRole');
+                    resultName = data.documents[0].data['fullName'];
+                    //print(role);
+         
+          }});
+      //print('userQuery:'+userQuery.toString());
+      //print('Role:'+role);
+    }
+      return resultName;
+  }  
 }

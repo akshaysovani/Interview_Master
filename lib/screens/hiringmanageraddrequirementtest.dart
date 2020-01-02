@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:interview_master/models/candidate.dart';
+import 'package:interview_master/models/primarySkill.dart';
+import 'package:interview_master/models/project.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
+import 'package:interview_master/models/secondarySkill.dart';
+import 'package:interview_master/models/softSkill.dart';
 import 'package:interview_master/models/user.dart';
 import 'package:interview_master/services/database.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +29,6 @@ class HiringManagerAddRequirementTest extends StatefulWidget {
 
 class HiringManagerAddRequirementTestState
     extends State<HiringManagerAddRequirementTest> {
-    
 
   var _experience = ['Fresher', 'Developer', 'Lead', 'Architect'];
   var _currentvalueselected = '';
@@ -36,14 +39,14 @@ class HiringManagerAddRequirementTestState
 
   HiringManagerAddRequirementTestState(this.requirement, this.addOrEdit);
 
-  List<String> primarySkills;
-  List<String> secondarySkills;
-  List<String> softSkills;
+  List<PrimarySkill> primarySkills;
+  List<SecondarySkill> secondarySkillsFromDB;
+  List<SoftSkill> softSkills;
   List<String> allSkills;
   List<bool> pressAttention;
   List<bool> longpressAttention;
 
-  List<String> projectList;
+  List<Project> projectList;
   AutoCompleteTextField projectTextField;
   GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
 
@@ -68,6 +71,14 @@ class HiringManagerAddRequirementTestState
 
   @override
   Widget build(BuildContext context) {
+    primarySkills = Provider.of<List<PrimarySkill>>(context);
+    secondarySkillsFromDB = Provider.of<List<SecondarySkill>>(context);
+    softSkills = Provider.of<List<SoftSkill>>(context);
+    projectList = Provider.of<List<Project>>(context);
+    for (Project project in projectList){
+        debugPrint('project: '+project.name);
+    }
+    //List<dynamic> primarySkills = Provider.of<List<dynamic>>(context);
     //var candidateList = Provider.of<List<Candidate>>(context) ?? [];
     //TextEditingController projectController = TextEditingController();
     //TextEditingController customerController = TextEditingController();
@@ -76,49 +87,49 @@ class HiringManagerAddRequirementTestState
     User user = Provider.of<User>(context);
     
     if (projectList == null){
-      projectList = List(); 
-      projectList.add('Project alpha');
+      projectList = List<Project>(); 
+      /* projectList.add('Project alpha');
       projectList.add('Project beta');
-      projectList.add('Project gamma');
-
+      projectList.add('Project gamma'); */
     }
 
     if (primarySkills == null){
-      primarySkills = List<String>();
-      primarySkills.add('Java');
+      primarySkills = List<PrimarySkill>();
+     /*  primarySkills.add('Java');
       primarySkills.add('C++');
       primarySkills.add('Python');
       primarySkills.add('C#.net');
-      primarySkills.add('Problem Solving');
+      primarySkills.add('Problem Solving'); */
     }
 
-    if (secondarySkills == null){
-      secondarySkills = List<String>();
-      secondarySkills.add('R');
+    if (secondarySkillsFromDB == null){
+      secondarySkillsFromDB = List<SecondarySkill>();
+     /*  secondarySkills.add('R');
       secondarySkills.add('SQL');
-
+ */
     }
 
     if (softSkills == null){
-      softSkills = List<String>();
-      softSkills.add('Communication');
+      softSkills = List<SoftSkill>();
+      /* softSkills.add('Communication');
       softSkills.add('Confidence');
       softSkills.add('Attitude');
       softSkills.add('Timeliness');
-      softSkills.add('Logical Ability');
+      softSkills.add('Logical Ability'); */
     }
 
     if (allSkills == null){
       allSkills = List<String>();
 
-      for (String skill in primarySkills){
-        allSkills.add(skill);
+      for (PrimarySkill skill in primarySkills){
+        allSkills.add(skill.skillName);
       }
-      for (String skill in secondarySkills){
-        allSkills.add(skill);
+
+      for (SecondarySkill skill in secondarySkillsFromDB){
+        allSkills.add(skill.skillName);
       }
-      for (String skill in softSkills){
-        allSkills.add(skill);
+      for (SoftSkill skill in softSkills){
+        allSkills.add(skill.skillName);
       }
     }
 
@@ -227,7 +238,7 @@ class HiringManagerAddRequirementTestState
                 child: Text(
                   'Long Press to add primary skill ' +
                       '\n' +
-                      'Single tap to add secondary skills',
+                      'Single tap to add secondary and soft skills',
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
               )),
@@ -259,12 +270,16 @@ class HiringManagerAddRequirementTestState
                           ),
                           onPressed: () {
                             setState(() {
+                              if (!checkIfSkillisPrimary(allSkills[position])){
                               pressAttention[position] = !pressAttention[position];
+                              }
                             });
                           },
                         onLongPress: (){
                               setState(() {
-                                longpressAttention[position] = !longpressAttention[position];
+                                if (checkIfSkillisPrimary(allSkills[position])){
+                                  longpressAttention[position] = !longpressAttention[position];
+                                }
                               });
                         },
 
@@ -273,10 +288,8 @@ class HiringManagerAddRequirementTestState
                   //Java
                 );
               }
+            ),
           ),
-          ),
-
-          
 
           Padding(
             padding: EdgeInsets.only(
@@ -312,7 +325,7 @@ class HiringManagerAddRequirementTestState
               ),
               child: projectTextField = AutoCompleteTextField<String>(
                 key: key,
-                suggestions: projectList,
+                suggestions: getProjectListStringFromProjectType(),
                 clearOnSubmit: false,
                 decoration: new InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
@@ -388,6 +401,7 @@ class HiringManagerAddRequirementTestState
                       textScaleFactor: 1.5,
                     ),
                     onPressed: () async{ 
+                      if (validationIsSuccessful()){
                       String primarySkillName = getPrimarySkill();
                       List<String> secondarySkillsNames = getSecondarySkills();
                       List<String> softSkillsNames = getSoftSkills();
@@ -407,7 +421,10 @@ class HiringManagerAddRequirementTestState
                         .editCurrentRequirement(Requirement(id: requirement.id, primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text),user); // Update it                        
                       }
                       _save();                      
-                    } 
+                      }else{
+                        _showAlertDialogue('Please try again','Please enter valid information');
+                      } 
+                    }
                     ),
               ))
         ],
@@ -516,10 +533,17 @@ class HiringManagerAddRequirementTestState
   List<String> getSecondarySkills(){
     List<String> returnVal = List();
     List<String> bothSkills = getSecondaryAndSoftSkills();
+    bothSkills.forEach((secondaryskill){
+      print(secondaryskill);
+    });
     for (String skill in bothSkills){
-        if (secondarySkills.contains(skill)){
-            returnVal.add(skill);
+      if (secondarySkillsFromDB != null){
+        for (SecondarySkill secskill in secondarySkillsFromDB){
+          if (secskill.skillName == skill){
+              returnVal.add(skill);
+          }
         }
+      }
     }
     return returnVal;
   }
@@ -528,10 +552,42 @@ class HiringManagerAddRequirementTestState
     List<String> returnVal = List();
     List<String> bothSkills = getSecondaryAndSoftSkills();
     for (String skill in bothSkills){
-        if (softSkills.contains(skill)){
-            returnVal.add(skill);
-        }
+      if (softSkills != null){
+        for (SoftSkill sofskill in softSkills){
+          if (sofskill.skillName == skill){
+              returnVal.add(skill);
+          }
+        }  
+      }
     }
     return returnVal;
+  }
+  List<String> getProjectListStringFromProjectType(){
+    List<String> toBeReturned = List();
+    for (Project project in projectList){
+        toBeReturned.add(project.name);
+    }
+    return toBeReturned;
+  }
+
+  bool checkIfSkillisPrimary(String skill){
+    for (PrimarySkill primarySkill in primarySkills){
+      if (primarySkill.skillName == skill){
+        return true;    
+      }  
+    }
+    return false;
+  }
+  bool validationIsSuccessful(){
+    int counter=0;
+    for (bool val in longpressAttention){
+      if (val == true){
+         counter+=1; 
+      }    
+    }
+    if (counter != 1){
+      return false;    
+    }
+    return true;
   }
 }
