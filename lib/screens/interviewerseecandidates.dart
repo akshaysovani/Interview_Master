@@ -7,9 +7,6 @@ import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/services/auth.dart';
 import 'package:provider/provider.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
 
 class InterviewerSeeCandidates extends StatefulWidget {
   @override
@@ -43,12 +40,6 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
 
     return Scaffold(
       appBar: AppBar(
-        /* leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              // goToPreviousPage();
-              goToStartPage();
-            }), */
         title: this.searchBar,
         actions: <Widget>[
           IconButton(  
@@ -89,12 +80,7 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
           ],
       ),
       body: getListView(),
-      
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Add Requirement',
-        child: Icon(Icons.add),
-      ),*/
+  
     );
   }
 
@@ -164,45 +150,6 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
                 this.searchBar = Text('Candidates');
                 goToInterviewerSeeRoundsOfCandidate(this.candidateListToBeDisplayed[position]);
               },
-              /*trailing: SizedBox(
-                width: 80.0,
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(Icons.edit),
-                    ),
-                    Container(width: 25,),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(Icons.delete),
-                    )
-                  ],
-                ),
-              ),*/
-
-              /*
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.edit),
-                      ),
-                    ),
-                  ), //edit
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.delete),
-                      ),
-                    ),
-                  )
-                ],*/
             ),
           );
         });
@@ -236,39 +183,3 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
     }));
   }
 }
-
-/* class CandidateSearch extends SearchDelegate{
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(icon: Icon(Icons.clear), onPressed: (){})
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-        icon: AnimatedIcon(
-          icon: AnimatedIcons.menu_arrow,
-          progress: transitionAnimation,
-        ),
-        onPressed: (){
-
-        },
-    );
-  }
-
-  
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
-  }
-  
-} */

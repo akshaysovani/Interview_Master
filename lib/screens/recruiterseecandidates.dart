@@ -8,9 +8,6 @@ import 'package:interview_master/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:interview_master/screens/recruiterseecandidatesandrequirements.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
 
 class RecruiterSeeCandidatesByRequirement extends StatefulWidget {
   List<Candidate> candidateListToBeDisplayed;
@@ -31,35 +28,8 @@ class RecruiterSeeCandidatesByRequirementState
 
   @override
   Widget build(BuildContext context) {
-      
-      
-
-    /* if (!dummy){
-    candidateList = Provider.of<List<Candidate>>(context) ?? [];
-    candidateListToBeDisplayed = List();
-    candidateListToBeDisplayed.addAll(candidateList);
-    } */
-
-    /* for (Candidate candidate in candidateListToBeDisplayed){
-      print(candidate.experienceLevel);
-    } */
-    //print(dummy);
-
-
-    /* if (candidateList == null) {
-      candidateList = List<Candidate>();
-    } */
 
     return Scaffold(
-        /*appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                // goToPreviousPage();
-              }),
-          title: Text('Java - Developer - Project alpha'),
-        ),*/
-
         body: getListView(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blue[900],
@@ -72,42 +42,8 @@ class RecruiterSeeCandidatesByRequirementState
             color: Colors.white,
           ),
         )
-        /*floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Add Requirement',
-        child: Icon(Icons.add),
-      ),*/
     );
   }
-
-  /* void filterSearchResults (String query){
-    List<Candidate> dummyCandidateList = List();
-    debugPrint(candidateList.length.toString());
-    for (Candidate candidate in candidateList){
-        print(candidate.experienceLevel);
-    }
-    //dummyCandidateList.addAll(candidateList);
-    //debugPrint(dummyCandidateList.length.toString());
-    if (query.isNotEmpty){
-      List<Candidate> dummyListData = List();
-      dummyCandidateList.forEach((candidate){
-      if (candidate.name.toLowerCase().contains(query.toLowerCase())){
-          dummyListData.add(candidate);
-      }
-      });
-      setState(() {
-        candidateListToBeDisplayed.clear();
-        candidateListToBeDisplayed.addAll(dummyListData);
-        dummy = true;
-      });
-    } else{
-      setState(() {
-        candidateListToBeDisplayed.clear();
-        candidateListToBeDisplayed.addAll(candidateList);
-        dummy = false;
-      });
-    } 
-  } */
 
   ListView getListView() {
     TextStyle titleStyle = Theme.of(context).textTheme.title;

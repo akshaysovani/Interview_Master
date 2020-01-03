@@ -6,9 +6,6 @@ import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/round.dart';
 import 'package:interview_master/services/database.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/All_screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
 
 class RecruiterAddCandidate extends StatefulWidget {
   Candidate candidate;
@@ -382,11 +379,6 @@ class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
                       List<String> secondarySkillsNames = getSecondarySkills();
                       List<String> softSkillsNames = getSoftSkills();
 
-                      /* print(primarySkillName);
-                      print(secondarySkillsNames);
-                      print(softSkillsNames);
-                      print(_currentvalueselected);
-                      print(projectTextField.textField.controller.text); */
                       
                          if (candidate.primarySkill == null){      //adding new requirement 
                         var result = await DatabaseService()
@@ -397,9 +389,6 @@ class RecruiterAddCandidateState extends State<RecruiterAddCandidate> {
                       }
                       _save();                      
 
-                      /* var result = await DatabaseService()
-                        .addNewCandidate(Candidate(name: nameController.text,primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text, roundsInfo: [Round(roundNumber: '0', status: 'dummy round', feedback: 'dummy feedback', interviewerName: 'dummy name')])); // Update it
-                      _save();   */
                     }),
               ))
         ],

@@ -3,10 +3,6 @@ import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/round.dart';
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/All_screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
-
 
 class HiringManagerSeeRoundsOfCandidate extends StatefulWidget {
   Candidate candidate;
@@ -50,11 +46,6 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
         title: Text(this.candidate.name),
       ),
       body: getListView(),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Add Requirement',
-        child: Icon(Icons.add),
-      ),*/
     );
   }
 
@@ -86,17 +77,6 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
                     //maxLines: fullFeedbackOn ? 10 : 1,
                     textAlign: TextAlign.start,
                   ),
-                  /*InkWell(
-                    onTap: (){ setState(() {
-                      fullFeedbackOn = !fullFeedbackOn;
-                    }); },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        fullFeedbackOn ? Text("Show Less",style: TextStyle(color: Colors.blue),) :  Text("Show More",style: TextStyle(color: Colors.blue))
-                      ],
-                    ),
-                  ),*/
                 ],
               ),
 
@@ -106,45 +86,6 @@ class HiringManagerSeeRoundsOfCandidateState extends State<HiringManagerSeeRound
                     style:
                     TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
               ),
-              /*trailing: SizedBox(
-                width: 80.0,
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(Icons.edit),
-                    ),
-                    Container(width: 25,),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(Icons.delete),
-                    )
-                  ],
-                ),
-              ),*/
-
-              /*
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.edit),
-                      ),
-                    ),
-                  ), //edit
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.delete),
-                      ),
-                    ),
-                  )
-                ],*/
             ),
           );
         });

@@ -22,14 +22,6 @@ class _WrapperState extends State<Wrapper> {
 
   String role = '';
 
-  /* initState(){
-    super.initState();
-     getRole( ).then((roleVal) {
-       role = roleVal; 
-    }); 
-  }
- */
-
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
@@ -82,9 +74,6 @@ class _WrapperState extends State<Wrapper> {
           }});
       print('userquery is :  '+ userQuery.toString());
     } 
-    /* if (role == null){
-      role = 'noSuchUser';
-    } */
       return role;
   }  
 }

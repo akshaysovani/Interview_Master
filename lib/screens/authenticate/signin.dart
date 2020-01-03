@@ -114,17 +114,6 @@ class SignInState extends State<SignIn> {
                               });
                             }
                           }
-
-                          /*dynamic result = await _auth.signInAnon();
-                      if (result != null){
-                          print('signed in');
-                          print(result.id);
-                      }else{
-                        print('error');
-                      }*/
-
-                          //print(usernameController.text);
-                          //print(passwordController.text);
                         }),
                   )),
                SizedBox(

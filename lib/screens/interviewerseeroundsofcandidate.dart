@@ -7,10 +7,6 @@ import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/round.dart';
 import 'package:provider/provider.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
-
 class InterviewerSeeRoundsOfCandidate extends StatefulWidget {
   Candidate candidate;
   InterviewerSeeRoundsOfCandidate(this.candidate);
@@ -101,17 +97,6 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
                     //maxLines: fullFeedbackOn ? 10 : 1,
                     textAlign: TextAlign.start,
                   ),
-                  /*InkWell(
-                    onTap: (){ setState(() {
-                      fullFeedbackOn = !fullFeedbackOn;
-                    }); },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        fullFeedbackOn ? Text("Show Less",style: TextStyle(color: Colors.blue),) :  Text("Show More",style: TextStyle(color: Colors.blue))
-                      ],
-                    ),
-                  ),*/
                 ],
               ),
 
@@ -121,45 +106,6 @@ class InterviewerSeeRoundsOfCandidateState extends State<InterviewerSeeRoundsOfC
                     style:
                     TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
               ),
-              /*trailing: SizedBox(
-                width: 80.0,
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(Icons.edit),
-                    ),
-                    Container(width: 25,),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Icon(Icons.delete),
-                    )
-                  ],
-                ),
-              ),*/
-
-              /*
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.edit),
-                      ),
-                    ),
-                  ), //edit
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.delete),
-                      ),
-                    ),
-                  )
-                ],*/
             ),
           );
         });

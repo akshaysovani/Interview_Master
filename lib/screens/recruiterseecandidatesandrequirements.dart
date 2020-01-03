@@ -7,9 +7,6 @@ import 'package:interview_master/screens/recruiterseerequirements.dart';
 import 'package:interview_master/services/auth.dart';
 import 'package:provider/provider.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
 
 class RecruiterSeeCandidatesAndRequirements extends StatefulWidget {
   @override
@@ -82,9 +79,6 @@ class RecruiterSeeCandidatesAndRequirementsState
                       onChanged: (value){
                         //print(this.context.toString());
                         filterSearchResults(value);
-                          /* dummy = false;
-                          this.searchIcon = Icon(Icons.search);
-                          this.searchBar = Text('Candidates'); */
                         
                       },
                       textInputAction: TextInputAction.go,
@@ -144,8 +138,6 @@ class RecruiterSeeCandidatesAndRequirementsState
       setState(() {
         candidateListToBeDisplayed.clear();
         candidateListToBeDisplayed.addAll(dummyListData);
-        /* for (Candidate candidate in candidateListToBeDisplayed){
-          print(candidate.name); */
         dummy = true;
       });
     } else{

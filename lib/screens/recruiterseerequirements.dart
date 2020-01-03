@@ -3,10 +3,6 @@ import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:provider/provider.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/All_screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
-
 class RecruiterSeeRequirements extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -27,13 +23,6 @@ class RecruiterSeeRequirementsState extends State<RecruiterSeeRequirements> {
 
 
     return Scaffold(
-
-      /*appBar: AppBar(title: Text('Requirements'),
-          leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          goToStartPage();
-        })),*/
       body: getListView(),
     );
   }
@@ -48,12 +37,6 @@ class RecruiterSeeRequirementsState extends State<RecruiterSeeRequirements> {
             color: Colors.white,
             elevation: 2.0,
             child: ListTile(
-              /*leading: GestureDetector(
-                onTap: () {},
-                child: Icon(Icons.info,
-                //    color: Colors.black
-                ),
-              ),*/
               title: Text(
                 //'\n'+
                 this.requirementList[position].primarySkill
@@ -78,30 +61,6 @@ class RecruiterSeeRequirementsState extends State<RecruiterSeeRequirements> {
                     fontSize: 15
                 ),
               ),
-
-
-              /*
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.edit),
-                      ),
-                    ),
-                  ), //edit
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Icon(Icons.delete),
-                      ),
-                    ),
-                  )
-                ],*/
             ),
           );
         });

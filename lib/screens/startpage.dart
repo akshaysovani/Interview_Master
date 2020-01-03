@@ -9,10 +9,6 @@ import 'package:interview_master/screens/hiringmanagerseerequirement.dart';
 import 'package:interview_master/screens/recruiterseecandidatesandrequirements.dart';
 import 'package:interview_master/services/auth.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
-
 class StartPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {

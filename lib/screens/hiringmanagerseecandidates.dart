@@ -61,11 +61,6 @@ class HiringManagerSeeCandidatesState extends State<HiringManagerSeeCandidates> 
         title: Text(this.requirement.primarySkill + ' - ' +  this.requirement.experienceLevel),
       ),
       body: getListView(),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Add Requirement',
-        child: Icon(Icons.add),
-      ),*/
     );
   }
 

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:interview_master/models/candidate.dart';
 import 'package:interview_master/models/user.dart';
-import 'package:interview_master/screens/hiringmanageraddrequirementtest.dart';
 import 'package:interview_master/screens/hiringmanageraddrequirement.dart';
 import 'package:interview_master/screens/hiringmanagerseecandidates.dart';
 //import 'dart:async';
@@ -50,12 +49,6 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
     
     if (requirementListForThisHiringManager == null){
       requirementListForThisHiringManager = List();
-      /* for (Requirement requirement in requirementList){
-          if (requirement.owner == resultName){
-            print('in*********');
-            requirementListForThisHiringManager.add(requirement);
-          }
-      } */
     }
 
     return Scaffold(
@@ -73,17 +66,12 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
               },
             )
           ],
-          /* leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                goToStartPage();
-              }) */
       ),  
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[900],
         onPressed: () {
-          goToHiringManagerAddRequirementTest(Requirement(), 'Add New Requirement');
+          goToHiringManagerAddRequirement(Requirement(), 'Add New Requirement');
         },
         tooltip: 'Add Requirement',
         child: Icon(Icons.add, color: Colors.white,),
@@ -131,12 +119,6 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
             color: Colors.white,
             elevation: 2.0,
             child: ListTile(
-              /*leading: GestureDetector(
-                onTap: () {},
-                child: Icon(Icons.info,
-                //    color: Colors.black
-                ),
-              ),*/
               title: Padding(
                 padding: EdgeInsets.only(top: 5, bottom: 10),
                 child: Text(
@@ -181,7 +163,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                       child: GestureDetector(
                         onTap: () {
                           String title = 'Edit - ' + this.requirementListForThisHiringManager[position].primarySkill + ' - ' + this.requirementListForThisHiringManager[position].experienceLevel;
-                          goToHiringManagerAddRequirementTest(this.requirementListForThisHiringManager[position],title);
+                          goToHiringManagerAddRequirement(this.requirementListForThisHiringManager[position],title);
                         },
                         child: Icon(Icons.edit
                           //color: Colors.blue
@@ -214,9 +196,9 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
     
   }
 
-  void goToHiringManagerAddRequirementTest(Requirement requirement, String addoredit){
+  void goToHiringManagerAddRequirement(Requirement requirement, String addoredit){
     Navigator.push(context, MaterialPageRoute(builder: (context){
-          return HiringManagerAddRequirementTest(requirement, addoredit);
+          return HiringManagerAddRequirement(requirement, addoredit);
     }));
   }
 
@@ -236,8 +218,6 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
                     //print(role);
          
           }});
-      //print('userQuery:'+userQuery.toString());
-      //print('Role:'+role);
     }
       return resultName;
   }  

@@ -7,10 +7,6 @@ import 'package:interview_master/models/radiobuttonmodel.dart';
 import 'package:interview_master/models/round.dart';
 import 'package:interview_master/services/database.dart';
 
-//import 'package:first_flutter_app/utils/database_helper.dart';
-//import 'package:first_flutter_app/screens/NoteDetail.dart';
-//import 'package:sqflite/sqflite.dart';
-
 class InterviewerEnterFeedback extends StatefulWidget {
   Candidate candidate;
 
@@ -225,9 +221,6 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
                       textScaleFactor: 1.5,
                     ),
                     onPressed: () async {
-                      /* print(roundNumberController.text);
-                      print(interviewerTextField.textField.controller.text);
-                      print(feedbackController.text); */
                       if (_radioCurrentValue == 1){
                         status = 'Pass';  
                       }else{
@@ -243,11 +236,7 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
       ),
     );
   }
-/*void changeStatus(String value){
-    setState(() {
-      _radioValueStatus = value;
-    });
-  }*/
+
   void _save(){
     Navigator.pop(context);
     Navigator.pop(context);

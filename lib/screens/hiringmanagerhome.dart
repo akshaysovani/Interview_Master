@@ -30,11 +30,6 @@ class HiringManagerHomePage extends StatelessWidget {
               },
             )
           ],
-          /* leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                goToStartPage();
-              }) */
       ),
       body: HiringManagerSeeRequirements(),
       ),
