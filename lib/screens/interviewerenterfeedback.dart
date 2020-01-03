@@ -174,7 +174,7 @@ class InterviewerEnterFeedbackState extends State<InterviewerEnterFeedback> {
               decoration: InputDecoration(
                 labelText: 'Feedback',
                 //hintText: 'Good in Java Spring, etc',
-                labelStyle: TextStyle(color: Colors.blue[900], fontSize: 20, fontFamily: 'Open Sans'),
+                labelStyle: TextStyle(color: Colors.blue[900], fontSize: 17, fontFamily: 'Open Sans'),
               ),
             ),
           ),

@@ -92,7 +92,7 @@ class RecruiterSeeCandidatesAndRequirementsState
                     );
                   } else {
                     this.searchIcon = Icon(Icons.search);
-                    this.searchBar = Text('Candidates');
+                    this.searchBar = Text('Interview Master');
                     setState(() {
                       dummy = false;
                     });

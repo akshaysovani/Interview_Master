@@ -18,6 +18,8 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   String role = '';
 
   /* initState(){
@@ -36,16 +38,15 @@ class _WrapperState extends State<Wrapper> {
     return FutureBuilder<String>(
       future: getRole(user),
       builder: (BuildContext buildContext, AsyncSnapshot<String> snapshot){
-        /* if (snapshot.connectionState == ConnectionState.waiting){
-          return Center(child: Text('Please wait its loading...'));
-        } */          
            if (snapshot.hasError){
               return Center(child: Text('Error: ${snapshot.error}'));
            }else{
              print('Snapshot data:' +snapshot.data);
              //snapshot.data
              if (snapshot.data == ''){
-                return Authenticate();
+              return Authenticate(); 
+             }else if (snapshot.data == 'noSuchUser'){
+              return Authenticate(); 
              }
              else if (snapshot.data == 'Hiring Manager'){
                 //return HiringManagerSeeRequirements();
@@ -59,21 +60,13 @@ class _WrapperState extends State<Wrapper> {
                 //return HiringManagerSeeRequirements();
                 return InterviewerSeeCandidates();
              }
-              /* return Scaffold(
-                appBar: AppBar(),
-                body: Container(
-                  //child: Text('${snapshot.data}'),
-                  child: Text(snapshot.data),
-                ),
-              ); */
-              //(child: new Text('${snapshot.data}'));  
            }
             return StartPage();
       },
      );
   }
 
-  Future<String> getRole(User user) async{
+  Future<String> getRole(User user) async {
     role = '';
     //var user = await FirebaseAuth.instance.currentUser();
     print('In getRole start');
@@ -87,35 +80,11 @@ class _WrapperState extends State<Wrapper> {
                     //print(role);
          
           }});
-      print('userQuery:'+userQuery.toString());
-      print('Role:'+role);
-      
-      /* userQuery.getDocuments().then((data){ 
-          if (data.documents.length > 0){
-                    print('In getRole');
-                    role = data.documents[0].data['role'];
-                    print(role);
-         
-          }});
- */
-
-/* 
-
-
-
-      DocumentReference userReference = Firestore.instance.collection('user').document(user.id);
-      DocumentSnapshot userSnapshot = await userReference.get();
-      role = userSnapshot['role'];
-      print(role);
- */
-
-
-      /* var result = await Firestore.instance.collection('user').document(user.id).get().then((DocumentSnapshot ds){
-      role = ds['role'];
-      print(role.toString());
-      }); */
-    }
-      //String abcd = "Hiring Manager";
+      print('userquery is :  '+ userQuery.toString());
+    } 
+    /* if (role == null){
+      role = 'noSuchUser';
+    } */
       return role;
   }  
 }

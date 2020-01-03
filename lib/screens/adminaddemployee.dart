@@ -3,6 +3,9 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/employee.dart';
+import 'package:interview_master/screens/authenticate/newuserregister.dart';
+import 'package:interview_master/screens/hiringmanagerseerequirement.dart';
+import 'package:interview_master/services/database.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
@@ -30,15 +33,20 @@ class AdminAddEmployeeState
   AdminAddEmployeeState(this.employee, this.addOrEdit);
 
   var _role = ['Hiring Manager','Recruiter','Interviewer','Admin'];
-  var _currentvalueselected;
-
+  var _currentvalueselected='';
+  TextEditingController nameController = TextEditingController();
   
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    this._currentvalueselected = _role[0];
+    if (employee.name != null){
+      _currentvalueselected = employee.role;
+      nameController.text = employee.name;
+    }else{
+      _currentvalueselected = _role[0];
+    } 
   }
 
   @override
@@ -67,7 +75,7 @@ class AdminAddEmployeeState
             ),
             child: TextField(
               style: textStyle,
-              //controller: tc,
+              controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Employee Name',
                 //hintText: 'e.g. 2',
@@ -111,7 +119,7 @@ class AdminAddEmployeeState
 
           Padding(
               padding: EdgeInsets.only(
-                top: 40,
+                top: 360,
                 left: 20,
                 right: 20,
                 bottom: 30
@@ -129,10 +137,10 @@ class AdminAddEmployeeState
                       'Save',
                       textScaleFactor: 1.5,
                     ),
-                    onPressed: () {
-                      setState(() {
+                    onPressed: () async {                        
+                        var result = await DatabaseService()
+                        .adminEditCurrentEmployee(Employee(id: employee.id, name: nameController.text, role: _currentvalueselected)); // Update it                        
                         _save();
-                      });
                     }),
               ))
         ],
@@ -145,7 +153,7 @@ class AdminAddEmployeeState
   }
 
   void _save(){
-    goToAdminSeeEmployees();
+    Navigator.pop(context);
     _showAlertDialogue('Success', 'Employee Saved Successfully');
   }
 

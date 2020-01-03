@@ -159,7 +159,7 @@ class SignInState extends State<SignIn> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return NewUserRegister();
+              return NewUserRegister(ifAdmin: false);
             }));
           },
           child: Text(

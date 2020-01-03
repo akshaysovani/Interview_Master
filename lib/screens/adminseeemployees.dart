@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:interview_master/models/employee.dart';
+import 'package:interview_master/screens/authenticate/newuserregister.dart';
 import 'package:interview_master/screens/hiringmanageraddrequirementtest.dart';
 import 'package:interview_master/screens/hiringmanagerseecandidates.dart';
 //import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
+import 'package:interview_master/services/database.dart';
+import 'package:provider/provider.dart';
 
 import 'adminaddemployee.dart';
 //import 'package:first_flutter_app/utils/database_helper.dart';
@@ -23,11 +26,10 @@ class AdminSeeEmployeesState extends State<AdminSeeEmployees> {
 
   @override
   Widget build(BuildContext context) {
+    employeeList = Provider.of<List<Employee>>(context) ?? [];
+
     if (employeeList == null) {
       employeeList = List<Employee>();
-      employeeList.add(Employee(1,'Akshay Sovani','Hiring Manager'));
-      employeeList.add(Employee(2,'Sanket Karandikar','Recruiter'));
-      employeeList.add(Employee(3,'Nachiket Gundi','Interviewer'));
     }
 
     return Scaffold(
@@ -44,7 +46,9 @@ class AdminSeeEmployeesState extends State<AdminSeeEmployees> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue[900],
         onPressed: () {
-          goToAdminAddEmployee(Employee(4,'',''),'Add Employee');
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return NewUserRegister(ifAdmin: true);
+                          }));
           //goToHiringManagerAddRequirementTest(Requirement(5,'','',''), 'Add Requirement');
         },
         tooltip: 'Add Employee',
@@ -71,7 +75,7 @@ class AdminSeeEmployeesState extends State<AdminSeeEmployees> {
               ),*/
               title: Text(
                 //'\n'+
-                this.employeeList[position].employeeName,
+                this.employeeList[position].name,
                 style: TextStyle(
                     color: Colors.blue[900],
                     fontFamily: 'Helvetica',
@@ -81,7 +85,7 @@ class AdminSeeEmployeesState extends State<AdminSeeEmployees> {
               ),
               subtitle: Text(
                 //'\n' +
-                this.employeeList[position].employeeRole
+                this.employeeList[position].role
                 //  + '\n'
                 ,
                 style: TextStyle(
@@ -99,7 +103,7 @@ class AdminSeeEmployeesState extends State<AdminSeeEmployees> {
                       //color: Colors.blue,
                       child: GestureDetector(
                         onTap: () {
-                          String toBePassed = 'Edit - ' + this.employeeList[position].employeeName;
+                          String toBePassed = 'Edit - ' + this.employeeList[position].name;
                           goToAdminAddEmployee(this.employeeList[position],toBePassed);
                         },
                         child: Icon(Icons.edit
@@ -109,7 +113,9 @@ class AdminSeeEmployeesState extends State<AdminSeeEmployees> {
                     ),
                     Container(width: 25,),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async{
+                        var result = await DatabaseService().deleteCurrentEmployee(this.employeeList[position]);
+                      },
                       child: Icon(Icons.delete
                         //color: Colors.red,
                       ),

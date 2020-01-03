@@ -4,20 +4,24 @@ import 'dart:async';
 import 'package:interview_master/models/requirement.dart';
 import 'package:interview_master/models/employee.dart';
 import 'package:interview_master/services/auth.dart';
+import 'package:provider/provider.dart';
 
 //import 'package:first_flutter_app/utils/database_helper.dart';
 //import 'package:first_flutter_app/screens/NoteDetail.dart';
 //import 'package:sqflite/sqflite.dart';
 
 class NewUserRegister extends StatefulWidget {
+  bool ifAdmin;
+  NewUserRegister({this.ifAdmin});
   @override
   State<StatefulWidget> createState() {
-    return NewUserRegisterState();
+    return NewUserRegisterState(this.ifAdmin);
   }
 }
 
 class NewUserRegisterState extends State<NewUserRegister> {
-
+  bool ifAdmin;
+  NewUserRegisterState(this.ifAdmin);
   final AuthService _auth = AuthService();
   String error = '';
 
@@ -25,9 +29,9 @@ class NewUserRegisterState extends State<NewUserRegister> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  
-  final _formKey = GlobalKey<FormState>();
+  List<Employee> employeeList;
 
+  final _formKey = GlobalKey<FormState>();
   var _role = ['Hiring Manager', 'Recruiter', 'Interviewer'];
   var _currentvalueselected;
 
@@ -40,6 +44,11 @@ class NewUserRegisterState extends State<NewUserRegister> {
 
   @override
   Widget build(BuildContext context) {
+    if (ifAdmin){
+      _role = ['Hiring Manager', 'Recruiter', 'Interviewer','Admin'];
+    }
+
+    employeeList = Provider.of<List<Employee>>(context) ?? [];
     TextStyle textStyle = Theme.of(context).textTheme.subtitle;
     return Scaffold(
         backgroundColor: Colors.white,

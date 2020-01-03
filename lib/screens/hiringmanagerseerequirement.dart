@@ -96,16 +96,34 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
     return FutureBuilder<String>( 
       future: getName(user),
       builder: (BuildContext buildContext, AsyncSnapshot<String> snapshot){
+        List<String> nameAndRole;
+        String snapName;
+        String snapRole;
+        debugPrint(snapshot.data);
+
+        if(snapshot.data != null){
+          nameAndRole = snapshot.data.split(',');
+        }
+        if (nameAndRole != null){
+          snapName = nameAndRole[0];
+          snapRole = nameAndRole[1];
+        }
+        
         if (snapshot.hasError){
-              return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
         //print(snapshot.data);
         requirementListForThisHiringManager.clear();
-        for (Requirement requirement in requirementList){
-              if (requirement.owner == snapshot.data){
+        if (snapRole == 'Admin'){
+          requirementListForThisHiringManager.addAll(requirementList);
+        }else{
+          for (Requirement requirement in requirementList){
+              if (requirement.owner == snapName){
                   requirementListForThisHiringManager.add(requirement);
               }
+          } 
         }
+        
         return ListView.builder(
         itemCount: requirementListForThisHiringManager.length,
         itemBuilder: (BuildContext context, int position) {
@@ -214,7 +232,7 @@ class HiringManagerSeeRequirementsState extends State<HiringManagerSeeRequiremen
       var userQuery = await Firestore.instance.collection('user').where('id', isEqualTo: user.id).getDocuments().then((data){ 
           if (data.documents.length > 0){
                     //print('In getRole');
-                    resultName = data.documents[0].data['fullName'];
+                    resultName = data.documents[0].data['fullName'] + ',' + data.documents[0].data['role'];
                     //print(role);
          
           }});

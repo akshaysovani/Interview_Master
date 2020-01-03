@@ -406,13 +406,6 @@ class HiringManagerAddRequirementTestState
                       List<String> secondarySkillsNames = getSecondarySkills();
                       List<String> softSkillsNames = getSoftSkills();
 
-                      /* print(primarySkillName);
-                      print(secondarySkillsNames);
-                      print(softSkillsNames);
-                      print(_currentvalueselected);
-                      print(projectTextField.textField.controller.text);
-                      print(customerController.text); */
-
                       if (requirement.primarySkill == null){      //adding new requirement 
                         var result = await DatabaseService()
                         .addNewRequirement(Requirement(primarySkill: primarySkillName, secondarySkills: secondarySkillsNames, softSkills: softSkillsNames, experienceLevel: _currentvalueselected, projectName: projectTextField.textField.controller.text),user); // Update it

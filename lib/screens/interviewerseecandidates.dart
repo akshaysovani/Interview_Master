@@ -208,11 +208,11 @@ class InterviewerSeeCandidatesState extends State<InterviewerSeeCandidates> {
         });
   }
 
-
   Text getText(Candidate candidate){
     int passCounter = 0;
     if (candidate.roundsInfo.last.roundNumber == '0'){
-      return Text('');
+      return Text('',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500,
+                      ));
     }else{
       for (Round round in candidate.roundsInfo){
         if (round.status == 'Pass'){

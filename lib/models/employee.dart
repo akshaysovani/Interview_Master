@@ -1,10 +1,10 @@
 class Employee{
-  int _employeeId;
-  String _employeeName;
-  String _employeeRole;
+  String id;
+  String name;
+  String role;
 
-  Employee(this._employeeId, this._employeeName, this._employeeRole);
-
+  Employee({this.id, this.name, this.role});
+/* 
   //String get employeeName => _employeeName;
   String get employeeName => _employeeName;
   String get employeeRole => _employeeRole;
@@ -15,5 +15,5 @@ class Employee{
 
   set employeeRole(String newEmployeeRole) {
     this._employeeRole = newEmployeeRole;
-  }
+  } */
 }

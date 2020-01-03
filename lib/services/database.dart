@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:interview_master/models/candidate.dart';
+import 'package:interview_master/models/employee.dart';
 import 'package:interview_master/models/primarySkill.dart';
 import 'package:interview_master/models/project.dart';
 import 'package:interview_master/models/requirement.dart';
@@ -9,6 +10,8 @@ import 'package:interview_master/models/secondarySkill.dart';
 import 'package:interview_master/models/softSkill.dart';
 import 'package:interview_master/models/user.dart';
 import 'package:interview_master/models/userwithname.dart';
+import 'package:flutter/material.dart';
+import 'package:interview_master/screens/authenticate/newuserregister.dart';
 
 class DatabaseService {
   final String uid;
@@ -21,6 +24,7 @@ class DatabaseService {
   final CollectionReference secondarySkillsCollection = Firestore.instance.collection('secondarySkills');
   final CollectionReference softSkillsCollection = Firestore.instance.collection('softSkills');
   final CollectionReference projectCollection = Firestore.instance.collection('project');
+  //final CollectionReference employeeCollection = Firestore.instance.collection('project');
   Future updateUserCollection(String fullName, String role) async{
       return await userCollection.document(uid).setData({
         'id': uid,
@@ -278,4 +282,52 @@ class DatabaseService {
   void deleteCurrentCandidate(Candidate candidate) async{
     final result = await candidateCollection.document(candidate.id).delete();   
   }
+
+
+
+
+  List<Employee> getEmployeeList(QuerySnapshot querySnapshot){  
+    return querySnapshot.documents.map((doc){
+      return Employee(
+        id: doc.data['id'] ?? '',
+        name: doc.data['fullName'] ?? '',
+        role: doc.data['role'] ?? '',
+      );
+    }).toList();
+  }
+
+  Stream<List<Employee>> get employees{
+      return userCollection.snapshots()
+      .map(getEmployeeList);
+  }
+
+  
+
+
+  //Add new Employee
+  Future addNewEmployee(Employee employee) async{
+      final docref = await userCollection.add({
+        'fullName': employee.name,
+        'role': employee.role
+      });
+
+      String docId = docref.documentID;
+      print('new Id is: '+ docId);
+      final _docRef = await userCollection.document(docId).setData({
+        'id': docId,    
+      }, merge: true);
+    }
+
+    //Edit Current Employee
+    Future adminEditCurrentEmployee(Employee employee) async{
+      final _docRef = await userCollection.document(employee.id).setData({
+        'fullName': employee.name,
+        'role': employee.role
+      }, merge: true);
+    }
+
+    //Delete Current Employee
+    Future deleteCurrentEmployee(Employee employee) async{
+    final result = await userCollection.document(employee.id).delete();
+    }
 }

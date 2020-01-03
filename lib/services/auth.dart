@@ -50,7 +50,6 @@ Future signInWithEmailAndPassword(String email, String password) async{
   }
 }
 
-
 //register with email and password
 Future registerWithEmailAndPassword(String fullName, String role, String email, String password) async{
   try{
